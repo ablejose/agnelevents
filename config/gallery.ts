@@ -9,23 +9,10 @@ export interface GalleryItem {
   wide?: boolean;
 }
 
-export interface GalleryVideo {
-  src: string;
-  poster?: string;
-  alt: string;
-}
-
 /** OUR WORK — images. Personal event photos only (public/events/<slug>/...). */
 export const galleryImages: GalleryItem[] = event.media.gallery.map((g) => ({
   src: asset(g.src),
   alt: g.alt,
-}));
-
-/** OUR WORK — videos. Personal clips only, each with a poster frame. */
-export const galleryVideos: GalleryVideo[] = event.media.videos.map((v) => ({
-  src: asset(v.src),
-  poster: asset(v.poster),
-  alt: v.alt,
 }));
 
 /** About-section crossfade pair. */

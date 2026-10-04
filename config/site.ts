@@ -47,7 +47,6 @@ export const brandAssets = {
   dir: asset(event.media.brandDir ?? "brand"),
   ogImage: asset(event.media.ogImage),
   heroPoster: asset(event.media.heroPoster),
-  heroVideo: event.media.heroVideo ? asset(event.media.heroVideo) : undefined,
 };
 
 export const icon = (file: string) => `${brandAssets.dir.replace(/\/$/, "")}/${file}`;

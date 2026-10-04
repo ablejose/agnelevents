@@ -8,11 +8,9 @@ import { t } from "@/lib/copy";
 
 export default function Hero() {
   const mediaRef = useRef<HTMLDivElement>(null);
-  const [reduce, setReduce] = useState(false);
 
   useEffect(() => {
     const r = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    setReduce(r);
     if (r) return;
     let ctx: any;
     (async () => {
@@ -31,8 +29,6 @@ export default function Hero() {
     return () => ctx?.revert();
   }, []);
 
-  const showVideo = !reduce && Boolean(brandAssets.heroVideo);
-
   return (
     <section id="hero" className="relative h-[100svh] w-full overflow-hidden bg-espresso">
       <div
@@ -40,22 +36,8 @@ export default function Hero() {
         className="absolute inset-0"
         style={{ willChange: "transform", transform: "translateZ(0)", backfaceVisibility: "hidden" }}
       >
-        {showVideo ? (
-          <video
-            className="h-full w-full object-cover"
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="auto"
-            poster={brandAssets.heroPoster}
-          >
-            <source src={brandAssets.heroVideo} type="video/mp4" />
-          </video>
-        ) : (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={brandAssets.heroPoster} alt={t(copy.hero.posterAlt)} className="h-full w-full object-cover" />
-        )}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={brandAssets.heroPoster} alt={t(copy.hero.posterAlt)} className="h-full w-full object-cover" />
       </div>
 
       <div

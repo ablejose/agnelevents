@@ -57,7 +57,6 @@ export const demo: EventConfig = {
   media: {
     // Absolute URLs, so the demo needs no binary assets in the repo.
     base: "",
-    heroVideo: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4",
     heroPoster: "https://picsum.photos/seed/demo-hero/1920/1080",
     ogImage: "https://picsum.photos/seed/demo-og/1200/630",
     brandDir: "/template/brand",
@@ -74,12 +73,6 @@ export const demo: EventConfig = {
       { src: "https://picsum.photos/seed/demo-tables/1200/1500", alt: "Golden table settings laid out for a wedding feast" },
       { src: "https://picsum.photos/seed/demo-arch/1200/1500", alt: "Floral arch and lanterns above a served buffet" },
       { src: "https://picsum.photos/seed/demo-centrepiece/1200/1500", alt: "Rose candelabra centrepiece on a banquet table" },
-    ],
-    videos: [
-      { src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4", poster: "https://picsum.photos/seed/demo-clip-ForBiggerBlazes/900/1600", alt: "Stage and buffet setup being finished before guests arrive" },
-      { src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4", poster: "https://picsum.photos/seed/demo-clip-ForBiggerEscapes/900/1600", alt: "Guests dining at a large catered function" },
-      { src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4", poster: "https://picsum.photos/seed/demo-clip-ForBiggerFun/900/1600", alt: "Live welcome-drinks counter at an event hall" },
-      { src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4", poster: "https://picsum.photos/seed/demo-clip-ForBiggerJoyrides/900/1600", alt: "Banquet hall set with buffet stations and dressed tables" },
     ],
   },
 

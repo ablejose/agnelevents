@@ -108,9 +108,6 @@ export const templateCopy = {
     photoQuote: "Every plate, petal and place setting — styled by hand.",
     photoBody: "A closer look at the spreads, stages and tables we create on the day — tap any photo to see it full-size.",
     photoHint: "Tap the photo to view it full-size",
-    videoQuote: "Don't just imagine it — press play.",
-    videoBody: "Real weddings, receptions and functions across {district} — hit play and watch the day come to life.",
-    videoHint: "Use the arrows to browse · tap a clip to play with sound",
   },
 
   process: {
@@ -201,8 +198,8 @@ export const templateCopy = {
 
   /** Motion knobs for the Our work section. */
   gallerySettings: {
-    /** Video carousel slide transition (seconds). */
-    videoTransitionSeconds: 0.8,
+    /** Photo card crossfade transition (seconds). */
+    photoTransitionSeconds: 0.8,
     /** Photo card crossfade interval (ms). */
     photoIntervalMs: 3200,
     /** About image crossfade interval (ms). */

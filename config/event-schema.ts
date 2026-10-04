@@ -21,13 +21,6 @@ export interface EventImage {
   alt: string;
 }
 
-export interface EventVideo {
-  src: MediaPath;
-  /** Poster frame shown before the clip is pressed. */
-  poster: MediaPath;
-  alt: string;
-}
-
 export interface EventReview {
   name: string;
   rating: number;
@@ -106,8 +99,6 @@ export interface EventConfig {
   media: {
     /** Folder holding ONLY this client's own photos/videos. */
     base: string;
-    /** Looping hero video (their own footage). */
-    heroVideo?: MediaPath;
     /** Hero still — also used when the visitor prefers reduced motion. */
     heroPoster: MediaPath;
     /** 1200x630 social share image. */
@@ -118,8 +109,6 @@ export interface EventConfig {
     about: EventImage[];
     /** "Our work" photos — their real events only. */
     gallery: EventImage[];
-    /** "Our work" reels — their real clips only. */
-    videos: EventVideo[];
   };
 
   /** Real reviews only. Leave empty to hide the Reviews section. */

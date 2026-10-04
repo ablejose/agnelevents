@@ -49,7 +49,6 @@ export const madeena: EventConfig = {
 
   media: {
     base: "/events/madeena",
-    heroVideo: "hero.mp4",
     heroPoster: "hero-poster.webp",
     ogImage: "og-image.jpg",
     brandDir: "brand",
@@ -69,14 +68,6 @@ export const madeena: EventConfig = {
       { src: "gallery/01.webp", alt: "Large banquet hall set for a catered reception" },
       { src: "gallery/12.webp", alt: "Spacious hall set with long tables for a big function" },
       { src: "gallery/03.webp", alt: "Floral wedding welcome signboard at the entrance" },
-    ],
-    videos: [
-      { src: "videos/clip-1.mp4", poster: "videos/clip-1.webp", alt: "Floral wedding stage with copper buffet chafing dishes" },
-      { src: "videos/clip-2.mp4", poster: "videos/clip-2.webp", alt: "Guests dining at a large catered function" },
-      { src: "videos/clip-3.mp4", poster: "videos/clip-3.webp", alt: "Live welcome-drinks counter at an event hall" },
-      { src: "videos/clip-4.mp4", poster: "videos/clip-4.webp", alt: "Banquet hall set with buffet stations and dressed tables" },
-      { src: "videos/clip-5.mp4", poster: "videos/clip-5.webp", alt: "Uniformed service staff at a banquet venue" },
-      { src: "videos/clip-6.mp4", poster: "videos/clip-6.webp", alt: "Live tea and juice welcome-drinks counter" },
     ],
   },
 

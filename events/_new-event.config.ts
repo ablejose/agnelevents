@@ -53,7 +53,6 @@ export const newEvent: EventConfig = {
 
   media: {
     base: "/events/new-event",
-    heroVideo: "hero.mp4", // omit this key to use the poster image instead
     heroPoster: "hero-poster.webp",
     ogImage: "og-image.jpg",
     brandDir: "brand",
@@ -62,7 +61,6 @@ export const newEvent: EventConfig = {
       { src: "about-2.webp", alt: "Describe the photo" },
     ],
     gallery: [{ src: "gallery/01.webp", alt: "Describe the photo" }],
-    videos: [{ src: "videos/clip-1.mp4", poster: "videos/clip-1.webp", alt: "Describe the clip" }],
   },
 
   // Real reviews only. Leave [] until you have them — the section hides itself.
