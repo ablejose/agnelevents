@@ -13,6 +13,8 @@
  * Anything here can be overridden per event via `overrides` in events/<slug>.config.ts.
  */
 
+import type { EventVariant } from "@/config/event-schema";
+
 export interface TemplateService {
   id: string;
   title: string;
@@ -77,8 +79,8 @@ export const templateCopy = {
     primary: "Plan your event",
     whatsapp: "Chat on WhatsApp",
     secondary: "View our work",
-    /** Prefilled WhatsApp enquiry. */
-    waMessage: "Hi {brand}, I'd like an enquiry for an event. Date: [date], Guests: [guests].",
+    /** Prefilled WhatsApp enquiry used by the header, hero and the floating button. */
+    waMessage: "Hi {brand}, I found your website and would like to enquire.",
     waFormIntro: "Hi {brand}, I'd like to plan an event.",
   },
 
@@ -92,6 +94,11 @@ export const templateCopy = {
   trustBar: {
     /** Extra pills after the rating/review ones. */
     items: ["{hours}", "Delivery available", "{city}, {region}"],
+  },
+
+  quickServices: {
+    eyebrow: "At a glance",
+    heading: "A quick look at what we offer",
   },
 
   services: {
@@ -211,3 +218,57 @@ export const templateCopy = {
     backgroundColor: "#FDFAF3",
   },
 } as const;
+
+/**
+ * Per-variant copy overrides, applied one level deep on top of templateCopy
+ * (see config/site.ts). Neutral wording only — no factual claims, since this
+ * is shared template copy, not a client's real data. Leaving a key out of a
+ * variant falls back to the base templateCopy above, so "catering" (the
+ * original/default copy) needs no entries at all.
+ */
+type Widen<T> = { [K in keyof T]: T[K] extends readonly string[] ? readonly string[] : string };
+
+export const variantCopy: Record<
+  EventVariant,
+  {
+    hero?: Partial<Widen<(typeof templateCopy)["hero"]>>;
+    services?: Partial<Widen<(typeof templateCopy)["services"]>>;
+    gallery?: Partial<Widen<(typeof templateCopy)["gallery"]>>;
+    process?: Partial<Widen<(typeof templateCopy)["process"]>>;
+    about?: Partial<Widen<(typeof templateCopy)["about"]>>;
+  }
+> = {
+  /** Catering — menu/services and food gallery lead. This is the original copy, so no overrides. */
+  catering: {},
+
+  /** Events — leads with services, decor and stages rather than food. */
+  events: {
+    hero: {
+      body: "Event setup, décor and complete on-day management across {district} — planned around your date and guest count.",
+    },
+    services: {
+      eyebrow: "What we do",
+      heading: "Décor, staging and complete event management",
+    },
+    gallery: {
+      eyebrow: "Our work",
+      heading: "Stages and setups we've styled",
+      body: "Real décor, staging and event setups across {district} — the look, the lighting and the layout on the day.",
+    },
+  },
+
+  /** Wedding — leads with the planning process and venues. */
+  wedding: {
+    hero: {
+      body: "Wedding planning across {district} — the process, the venue and the day, planned around you.",
+    },
+    process: {
+      eyebrow: "How we plan",
+      heading: "A clear planning process, from the first conversation to the big day.",
+    },
+    about: {
+      headingLead: "Weddings and venues, planned with",
+      headingAccent: "care.",
+    },
+  },
+};

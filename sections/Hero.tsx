@@ -67,12 +67,40 @@ export default function Hero() {
           </span>
         </h1>
 
+        {/* Local hero headline — falls back to the tagline when unset (config/event-schema.ts brand.headline). */}
+        <p
+          className="mt-5 max-w-xl font-sans text-lg font-medium leading-snug"
+          style={{ color: "#ffffff", textShadow: "0 1px 20px rgba(0,0,0,0.35)" }}
+        >
+          {site.headline}
+        </p>
+
+        {site.taglineMl && (
+          <p className="mt-1 max-w-xl font-sans text-sm font-light" style={{ color: "rgba(255,255,255,0.85)" }}>
+            {site.taglineMl}
+          </p>
+        )}
+
         <p
           className="mt-6 max-w-xl font-sans text-base font-light leading-relaxed"
           style={{ color: "rgba(255,255,255,0.9)", textShadow: "0 1px 20px rgba(0,0,0,0.4)" }}
         >
           {t(copy.hero.body)}
         </p>
+
+        {site.highlights.length > 0 && (
+          <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
+            {site.highlights.map((h) => (
+              <span
+                key={h}
+                className="rounded-full border px-3.5 py-1.5 font-sans text-xs font-medium"
+                style={{ borderColor: "rgba(255,255,255,0.35)", color: "#ffffff", background: "rgba(255,255,255,0.08)" }}
+              >
+                {h}
+              </span>
+            ))}
+          </div>
+        )}
 
         <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
           <Button href={waLink()} variant="whatsapp" external>

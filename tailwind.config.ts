@@ -18,8 +18,10 @@ const config: Config = {
         cream: "#FDFAF3",
         sand: "#E8DCC7",
         muted: "#6F665A",
-        saffron: "#C4892E",
-        "saffron-2": "#A9721F",
+        // Theme-able via CSS variables (see app/layout.tsx + config/event-schema.ts `theme`).
+        // Default values come from the :root declaration in app/globals.css.
+        saffron: "var(--saffron)",
+        "saffron-2": "var(--saffron-2)",
         maroon: "#7A2E2A",
       },
       fontFamily: {

@@ -10,6 +10,10 @@
  *   2. Personal media (only their own photos/videos)                        -> public/events/<slug>/...
  *   3. Reusable copy + stock art (how we work / what we do)                 -> config/template.ts + public/template/
  *   4. Sections/components NEVER hardcode a business detail. They read config.
+ *
+ * Everything added below this line is OPTIONAL and backward compatible —
+ * existing events/<slug>.config.ts files that do not set them keep building
+ * and rendering exactly as before.
  */
 
 /** A media path. Relative paths ("gallery/01.webp") resolve against `media.base`. */
@@ -21,6 +25,13 @@ export interface EventImage {
   alt: string;
 }
 
+/**
+ * A gallery/about entry. Accepts a plain path/URL string (alt is generated),
+ * or an object with an optional `alt` and an optional `caption` shown under
+ * the photo in the Gallery section.
+ */
+export type GalleryEntry = MediaPath | { src: MediaPath; alt?: string; caption?: string };
+
 export interface EventReview {
   name: string;
   rating: number;
@@ -29,9 +40,20 @@ export interface EventReview {
   source?: string;
 }
 
+/**
+ * Which section order + copy set to use. Defaults to "catering" when unset.
+ *   catering -> menu/services + food gallery first.
+ *   events   -> services, decor and stages first.
+ *   wedding  -> planning process and venues first.
+ */
+export type EventVariant = "catering" | "events" | "wedding";
+
 export interface EventConfig {
   /** URL-safe id. Must match the folder name under public/events/<slug>/. */
   slug: string;
+
+  /** Section order + copy set for this business. Default: "catering". */
+  variant?: EventVariant;
 
   brand: {
     /** Big display word in the hero, header, loader, footer. e.g. "Madeena" */
@@ -44,6 +66,10 @@ export interface EventConfig {
     kicker: string;
     /** One-line promise. e.g. "Weddings & events, catered with care." */
     tagline: string;
+    /** Local hero headline shown under the name. Falls back to `tagline` when unset. */
+    headline?: string;
+    /** Optional Malayalam line shown under the headline/tagline in the hero. */
+    taglineMl?: string;
   };
 
   contact: {
@@ -96,6 +122,28 @@ export interface EventConfig {
     reviews: number;
   };
 
+  /**
+   * Brand theme colours, applied as CSS variables in the layout and picked up
+   * by every button/accent/heading that currently uses the saffron palette.
+   * Omit to keep the template's default gold palette.
+   */
+  theme?: {
+    /** Hex colour, e.g. "#C4892E". Primary accent (buttons, highlights, eyebrows). */
+    primary: string;
+    /** Hex colour, e.g. "#A9721F". Secondary accent (hovers, kickers). */
+    accent: string;
+  };
+
+  /**
+   * Short service cards rendered as a lightweight grid near the top of the
+   * page. Independent of `overrides.services` (the full "what we do" cards).
+   * Leave unset/empty to hide the section.
+   */
+  services?: { title: string; note?: string }[];
+
+  /** Short chips rendered near the hero (e.g. "500+ events styled"). Leave unset/empty to hide. */
+  highlights?: string[];
+
   media: {
     /** Folder holding ONLY this client's own photos/videos. */
     base: string;
@@ -106,9 +154,9 @@ export interface EventConfig {
     /** Favicon/app-icon folder for this brand. */
     brandDir?: MediaPath;
     /** Crossfading pair (or more) in the About section. */
-    about: EventImage[];
+    about: GalleryEntry[];
     /** "Our work" photos — their real events only. */
-    gallery: EventImage[];
+    gallery: GalleryEntry[];
   };
 
   /** Real reviews only. Leave empty to hide the Reviews section. */

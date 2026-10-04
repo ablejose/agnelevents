@@ -10,9 +10,17 @@ import type { EventConfig } from "@/config/event-schema";
  * Media is intentionally remote (picsum placeholders + public sample clips) to
  * show that `media.base` accepts absolute URLs — a real event points it at
  * public/events/<slug>/ or a Cloudinary folder instead.
+ *
+ * This config also exercises every optional field added in the template
+ * upgrade: variant, theme, services, highlights, brand.headline/taglineMl,
+ * and gallery entries using both the plain-string and {src, caption} forms.
  */
 export const demo: EventConfig = {
   slug: "demo",
+
+  // Exercises `variant` — this business is a caterer, so "catering" (the
+  // default section order + copy) is the correct choice.
+  variant: "catering",
 
   brand: {
     name: "Anjali",
@@ -20,6 +28,8 @@ export const demo: EventConfig = {
     descriptor: "Catering & Event Management",
     kicker: "Catering & Events",
     tagline: "Weddings & events, catered with care.",
+    headline: "Weddings and functions, styled beautifully.",
+    taglineMl: "ഒരുക്കങ്ങൾ ഭംഗിയായി, സ്നേഹത്തോടെ.",
   },
 
   contact: {
@@ -50,9 +60,24 @@ export const demo: EventConfig = {
   web: {
     url: "https://event-template.vercel.app",
     instagram: "https://www.instagram.com/explore/tags/keralawedding/",
+    facebook: "https://www.facebook.com/",
   },
 
   reputation: { rating: 4.9, reviews: 36 },
+
+  // Exercises `theme` — a custom forest-green / mustard palette instead of
+  // the template's default gold, applied as CSS variables in the layout.
+  theme: { primary: "#2F6F4F", accent: "#D4A017" },
+
+  // Exercises `services` — the lightweight "at a glance" grid.
+  services: [
+    { title: "Live Counters", note: "Chaat, dosa and dessert counters cooked to order." },
+    { title: "Floral Styling", note: "Stage, mandap and table florals, done in-house." },
+    { title: "Full-Day Coordination", note: "One point of contact from setup to send-off." },
+  ],
+
+  // Exercises `highlights` — short chips near the hero.
+  highlights: ["Multi-cuisine menus", "In-house décor team", "Delivery across Thrissur"],
 
   media: {
     // Absolute URLs, so the demo needs no binary assets in the repo.
@@ -65,14 +90,16 @@ export const demo: EventConfig = {
       { src: "https://picsum.photos/seed/demo-about-2/1200/1500", alt: "Outdoor evening banquet with floral table styling" },
     ],
     gallery: [
-      { src: "https://picsum.photos/seed/demo-stage/1200/1500", alt: "Floral wedding stage and mandap set for the ceremony" },
-      { src: "https://picsum.photos/seed/demo-hall/1200/1500", alt: "Banquet hall dressed with long tables and candlelight" },
-      { src: "https://picsum.photos/seed/demo-buffet/1200/1500", alt: "Buffet spread with gold chafing dishes at a function" },
-      { src: "https://picsum.photos/seed/demo-lanterns/1200/1500", alt: "Floral decor and hanging lanterns over a buffet counter" },
-      { src: "https://picsum.photos/seed/demo-backdrop/1200/1500", alt: "Floral pillars and monogram backdrop at a reception" },
-      { src: "https://picsum.photos/seed/demo-tables/1200/1500", alt: "Golden table settings laid out for a wedding feast" },
-      { src: "https://picsum.photos/seed/demo-arch/1200/1500", alt: "Floral arch and lanterns above a served buffet" },
-      { src: "https://picsum.photos/seed/demo-centrepiece/1200/1500", alt: "Rose candelabra centrepiece on a banquet table" },
+      // Exercises the plain-string gallery form (alt is auto-generated).
+      "https://picsum.photos/seed/demo-stage/1200/1500",
+      // Exercises the {src, alt, caption} gallery form — caption is shown under the photo.
+      { src: "https://picsum.photos/seed/demo-hall/1200/1500", alt: "Banquet hall dressed with long tables and candlelight", caption: "Banquet hall styling" },
+      { src: "https://picsum.photos/seed/demo-buffet/1200/1500", alt: "Buffet spread with gold chafing dishes at a function", caption: "Buffet spread" },
+      { src: "https://picsum.photos/seed/demo-lanterns/1200/1500", alt: "Floral decor and hanging lanterns over a buffet counter", caption: "Floral decor & lanterns" },
+      { src: "https://picsum.photos/seed/demo-backdrop/1200/1500", alt: "Floral pillars and monogram backdrop at a reception", caption: "Reception backdrop" },
+      { src: "https://picsum.photos/seed/demo-tables/1200/1500", alt: "Golden table settings laid out for a wedding feast", caption: "Table settings" },
+      { src: "https://picsum.photos/seed/demo-arch/1200/1500", alt: "Floral arch and lanterns above a served buffet", caption: "Floral arch" },
+      { src: "https://picsum.photos/seed/demo-centrepiece/1200/1500", alt: "Rose candelabra centrepiece on a banquet table", caption: "Table centrepiece" },
     ],
   },
 

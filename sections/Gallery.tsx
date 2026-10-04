@@ -66,9 +66,9 @@ export default function Gallery() {
             </span>
           </button>
 
-          {/* Caption for the current photo */}
+          {/* Caption for the current photo — prefers the explicit `caption`, falls back to `alt`. */}
           <p className="mx-auto mt-4 max-w-md text-center font-sans text-sm text-ink/80">
-            {galleryImages[photo].alt}
+            {galleryImages[photo].caption ?? galleryImages[photo].alt}
           </p>
 
           {/* Dots — jump to any photo */}

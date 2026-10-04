@@ -12,12 +12,22 @@ import type { EventConfig } from "@/config/event-schema";
 export const newEvent: EventConfig = {
   slug: "new-event",
 
+  // Optional. Picks the section order + copy set: "catering" (default) puts
+  // menu/services and the food gallery first; "events" leads with services,
+  // decor and stages; "wedding" leads with the planning process and venues.
+  // Leave unset to use "catering".
+  // variant: "catering",
+
   brand: {
     name: "Brand",
     fullName: "Brand Catering & Event Management",
     descriptor: "Catering & Event Management",
     kicker: "Catering & Events",
     tagline: "Weddings & events, catered with care.",
+    // Optional. Local hero headline shown under the name. Falls back to `tagline` when unset.
+    // headline: "Weddings and functions, styled beautifully.",
+    // Optional. A short Malayalam line shown under the headline/tagline in the hero.
+    // taglineMl: "ഒരുക്കങ്ങൾ ഭംഗിയായി.",
   },
 
   contact: {
@@ -46,10 +56,22 @@ export const newEvent: EventConfig = {
 
   web: {
     url: "https://www.example.in",
-    instagram: "", // leave blank to hide the Instagram section
+    instagram: "", // leave blank to hide the Instagram section + footer icon
+    facebook: "", // leave blank to hide the Facebook footer icon
   },
 
   reputation: { rating: 5.0, reviews: 0 },
+
+  // Optional. Brand colours applied as CSS variables (buttons, accents,
+  // headings). Omit to keep the template's default gold palette.
+  // theme: { primary: "#C4892E", accent: "#A9721F" },
+
+  // Optional. Short cards for the lightweight "at a glance" services grid.
+  // Independent of `overrides.services` below. Leave unset/empty to hide it.
+  // services: [{ title: "Live counters", note: "Chaat and dessert counters cooked to order." }],
+
+  // Optional. Short chips rendered near the hero. Leave unset/empty to hide them.
+  // highlights: ["Multi-cuisine menus", "In-house décor team"],
 
   media: {
     base: "/events/new-event",
@@ -60,7 +82,9 @@ export const newEvent: EventConfig = {
       { src: "about-1.webp", alt: "Describe the photo" },
       { src: "about-2.webp", alt: "Describe the photo" },
     ],
-    gallery: [{ src: "gallery/01.webp", alt: "Describe the photo" }],
+    // Gallery entries accept a plain path/URL string (alt is generated), or an
+    // object with an optional `alt` and an optional `caption` shown under the photo.
+    gallery: [{ src: "gallery/01.webp", alt: "Describe the photo", caption: "Describe the photo" }],
   },
 
   // Real reviews only. Leave [] until you have them — the section hides itself.

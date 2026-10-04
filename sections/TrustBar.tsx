@@ -3,6 +3,9 @@ import { copy, site } from "@/config/site";
 import { tAll } from "@/lib/copy";
 
 export default function TrustBar() {
+  // Hide the whole trust/rating row when there is no real review count to show.
+  if (!site.reviews) return null;
+
   const items = [
     `${site.rating.toFixed(1)}\u2605 on Google`,
     `${site.reviews} reviews`,

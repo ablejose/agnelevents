@@ -1,5 +1,6 @@
 import Hero from "@/sections/Hero";
 import TrustBar from "@/sections/TrustBar";
+import QuickServices from "@/sections/QuickServices";
 import Services from "@/sections/Services";
 import Gallery from "@/sections/Gallery";
 import Process from "@/sections/Process";
@@ -8,22 +9,42 @@ import Testimonials from "@/sections/Testimonials";
 import Contact from "@/sections/Contact";
 import InstagramCta from "@/sections/Instagram";
 import Footer from "@/sections/Footer";
+import { variant } from "@/config/site";
 
 /**
- * Page order follows the AIDA conversion journey:
- *  Hero (Attention) -> TrustBar -> Services (Interest) -> Gallery (Desire) ->
- *  Process (Process Trust) -> About -> Testimonials (Social proof) ->
- *  Contact (Action) -> Instagram (follow / more work) -> Footer.
+ * Page order follows the AIDA conversion journey, but the middle block
+ * (Services / Gallery / Process / About) reorders per `event.variant`
+ * (config/event-schema.ts) so the lead offer matches the business:
+ *
+ *   catering (default) -> services, food gallery first, then process + about.
+ *   events             -> services (decor/stages), gallery, then process + about.
+ *   wedding            -> planning process + venues (about) first, then services + gallery.
  */
+const MIDDLE_ORDER: Record<string, readonly ["services" | "gallery" | "process" | "about", ...("services" | "gallery" | "process" | "about")[]]> = {
+  catering: ["services", "gallery", "process", "about"],
+  events: ["services", "gallery", "process", "about"],
+  wedding: ["process", "about", "services", "gallery"],
+};
+
+const SECTION_BY_KEY = {
+  services: Services,
+  gallery: Gallery,
+  process: Process,
+  about: About,
+} as const;
+
 export default function HomePage() {
+  const order = MIDDLE_ORDER[variant] ?? MIDDLE_ORDER.catering;
+
   return (
     <main>
       <Hero />
       <TrustBar />
-      <Services />
-      <Gallery />
-      <Process />
-      <About />
+      <QuickServices />
+      {order.map((key) => {
+        const Section = SECTION_BY_KEY[key];
+        return <Section key={key} />;
+      })}
       <Testimonials />
       <Contact />
       <InstagramCta />

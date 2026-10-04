@@ -1,4 +1,4 @@
-import { Phone, MapPin, Clock } from "lucide-react";
+import { Phone, MapPin, Clock, Instagram, Facebook } from "lucide-react";
 import { copy, site, telLink } from "@/config/site";
 
 export default function Footer() {
@@ -11,6 +11,33 @@ export default function Footer() {
             <p className="font-display text-2xl">{site.name}</p>
             <p className="mt-1 font-sans text-[0.65rem] uppercase tracking-[0.24em] text-saffron">{site.kicker}</p>
             <p className="body-copy mt-4 max-w-xs text-ivory/60">{site.tagline}</p>
+
+            {(site.instagram || site.facebook) && (
+              <div className="mt-4 flex items-center gap-3">
+                {site.instagram && (
+                  <a
+                    href={site.instagram}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Instagram"
+                    className="grid h-9 w-9 place-items-center rounded-full border border-ivory/25 text-ivory/80 transition-colors hover:border-saffron hover:text-saffron"
+                  >
+                    <Instagram size={16} />
+                  </a>
+                )}
+                {site.facebook && (
+                  <a
+                    href={site.facebook}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Facebook"
+                    className="grid h-9 w-9 place-items-center rounded-full border border-ivory/25 text-ivory/80 transition-colors hover:border-saffron hover:text-saffron"
+                  >
+                    <Facebook size={16} />
+                  </a>
+                )}
+              </div>
+            )}
           </div>
           <div className="space-y-3 font-sans text-sm text-ivory/80">
             <p className="flex items-start gap-2"><MapPin size={16} className="mt-0.5 shrink-0 text-saffron" /> {site.address}</p>

@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Fraunces, Manrope } from "next/font/google";
 import "./globals.css";
 import { brandAssets, copy, icon, site } from "@/config/site";
+import { event } from "@/event.config";
 import { jsonLd, seo } from "@/config/seo";
 import SmoothScroll from "@/components/SmoothScroll";
 import Header from "@/components/Header";
@@ -85,12 +86,18 @@ export const viewport: Viewport = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  // Optional per-event brand colours (config/event-schema.ts `theme`). Falls back to the
+  // template's default gold palette (declared in app/globals.css :root) when unset.
+  const themeStyle = event.theme
+    ? ({ "--saffron": event.theme.primary, "--saffron-2": event.theme.accent } as React.CSSProperties)
+    : undefined;
+
   return (
     <html lang={seo.lang} className={`${fraunces.variable} ${manrope.variable}`}>
       <head>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       </head>
-      <body>
+      <body style={themeStyle}>
         <Loader />
         <SmoothScroll>
           <Header />
