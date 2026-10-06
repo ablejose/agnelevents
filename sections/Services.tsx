@@ -19,7 +19,7 @@ export default function Services() {
   };
 
   return (
-    <section id="services" aria-labelledby="services-heading" className="bg-white py-12 md:py-16">
+    <section id="services" aria-labelledby="services-heading" className="bg-white py-16 md:py-24">
       <div className="mx-auto max-w-shell px-6">
         <Reveal>
           <p className="eyebrow">{copy.services.eyebrow}</p>
@@ -28,7 +28,7 @@ export default function Services() {
           </h2>
         </Reveal>
 
-        <div className="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div className={`mt-12 grid grid-cols-1 gap-5 sm:grid-cols-2 ${services.length === 4 ? "lg:grid-cols-4" : "lg:grid-cols-3"}`}>
           {services.map((s, i) => {
             const num = String(i + 1).padStart(2, "0");
             const open = openId === s.id;
@@ -44,8 +44,7 @@ export default function Services() {
                       toggle(s.id);
                     }
                   }}
-                  className="group relative block h-full cursor-pointer overflow-hidden rounded-brand focus:outline-none focus-visible:ring-2 focus-visible:ring-saffron"
-                  style={{ aspectRatio: "3 / 4" }}
+                  className="group relative block aspect-[4/3] h-full cursor-pointer overflow-hidden rounded-brand focus:outline-none focus-visible:ring-2 focus-visible:ring-saffron sm:aspect-[3/4]"
                 >
                   <Img
                     src={s.image}
@@ -53,14 +52,14 @@ export default function Services() {
                     fallbackSeed={s.image}
                     className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 lg:group-hover:scale-105"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/25 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-ink/95 via-ink/45 to-ink/0" />
                   <div
                     className={`absolute inset-x-0 bottom-0 p-6 transition-opacity duration-300 lg:group-hover:opacity-0 lg:group-focus-within:opacity-0 ${
                       open ? "opacity-0" : "opacity-100"
                     }`}
                   >
-                    <span className="font-display text-2xl text-saffron">{num}</span>
-                    <h3 className="mt-1 font-display text-2xl text-saffron">{s.title}</h3>
+                    <span className="font-sans text-xs font-semibold tracking-[0.3em] text-saffron">{num}</span>
+                    <h3 className="mt-2 font-display text-2xl leading-tight text-ivory">{s.title}</h3>
                     <span className="mt-2 inline-flex items-center gap-1 font-sans text-xs text-ivory/75 lg:hidden">
                       {copy.services.tapHint}
                     </span>

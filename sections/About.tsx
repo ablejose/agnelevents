@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Star, Clock, Truck, MapPin } from "lucide-react";
 import Reveal from "@/components/Reveal";
 import { Img } from "@/components/ui/Img";
-import { copy, event, site } from "@/config/site";
+import { copy, event, site, withoutDelivery } from "@/config/site";
 import { aboutImages, gallerySettings } from "@/config/gallery";
 import { t, tAll } from "@/lib/copy";
 
@@ -13,7 +13,7 @@ const POINT_ICONS = [Clock, Truck, MapPin];
 export default function About() {
   const points = [
     { icon: Star, text: `${site.rating.toFixed(1)}\u2605 on Google (${site.reviews} reviews)` },
-    ...tAll(copy.about.points).map((text, i) => ({ icon: POINT_ICONS[i % POINT_ICONS.length], text })),
+    ...withoutDelivery(tAll(copy.about.points)).map((text, i) => ({ icon: POINT_ICONS[i % POINT_ICONS.length], text })),
   ];
 
   const [idx, setIdx] = useState(0);
@@ -27,7 +27,7 @@ export default function About() {
   const body = t(event.overrides?.aboutBody ?? copy.about.body);
 
   return (
-    <section id="about" aria-labelledby="about-heading" className="bg-white py-12 md:py-16">
+    <section id="about" aria-labelledby="about-heading" className="bg-cream py-16 md:py-24">
       <div className="mx-auto grid max-w-shell grid-cols-1 items-center gap-12 px-6 lg:grid-cols-2">
         <Reveal>
           <div>

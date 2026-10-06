@@ -32,11 +32,12 @@ config/
   process.ts               <- derived: shared steps (+ per-event overrides)
   gallery.ts               <- derived: their photos/reels, resolved to media.base
   reviews.ts               <- derived: their real reviews
+  menu.ts                  <- derived: Kerala wedding menu for the quote builder (+ per-event override)
   seo.ts                   <- derived: metadata + schema.org LocalBusiness
 lib/copy.ts                <- {token} fill + media path resolver
 app/                       <- layout (metadata), page, sitemap, robots, manifest
 sections/                  <- Hero, TrustBar, Services, Gallery, Process, About,
-                              Testimonials, Contact, Instagram, Footer
+                              Testimonials, Menu (quote builder), Footer (visit + map)
 components/                <- Header, Loader, Lightbox, Reveal, SmoothScroll, WhatsAppFab, ui/
 public/
   template/                <- stock art shared by every event
@@ -62,3 +63,4 @@ Optional env (see `.env.example`): `NEXT_PUBLIC_WHATSAPP_NUMBER`,
 ## Live builds from this template
 
 - Madeena Catering & Event Management, Perintalmanna — `events/madeena.config.ts`
+- Agnel Caters & Events, Changanassery — `events/agnel.config.ts`

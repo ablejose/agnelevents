@@ -35,6 +35,7 @@ export default function Process() {
     if (desktop) {
       const node = olRef.current;
       if (!node) return;
+      // Start only once the steps have scrolled up to the middle of the screen.
       const io = new IntersectionObserver(
         (entries) => {
           entries.forEach((e) => {
@@ -45,7 +46,7 @@ export default function Process() {
             }
           });
         },
-        { threshold: 0.35 }
+        { threshold: 0, rootMargin: "0px 0px -50% 0px" }
       );
       io.observe(node);
       return () => io.disconnect();
@@ -64,14 +65,14 @@ export default function Process() {
           });
         });
       },
-      { threshold: 0, rootMargin: "0px 0px -30% 0px" }
+      { threshold: 0, rootMargin: "0px 0px -50% 0px" }
     );
     liRefs.current.forEach((li) => li && io.observe(li));
     return () => io.disconnect();
   }, []);
 
   return (
-    <section id="process" aria-labelledby="process-heading" className="bg-white py-12 md:py-16">
+    <section id="process" aria-labelledby="process-heading" className="bg-white py-16 md:py-24">
       <div className="mx-auto max-w-shell px-6">
         <Reveal>
           <p className="eyebrow">{copy.process.eyebrow}</p>

@@ -23,7 +23,7 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
       const { ScrollTrigger } = await import("gsap/ScrollTrigger");
       gsap.registerPlugin(ScrollTrigger);
 
-      lenis = new Lenis({ duration: 1.15, smoothWheel: true, touchMultiplier: 1.4 });
+      lenis = new Lenis({ duration: 1.15, smoothWheel: true, touchMultiplier: 1.4, anchors: { offset: -72 } });
       lenis.on("scroll", ScrollTrigger.update);
       const tick = (t: number) => lenis.raf(t * 1000);
       gsap.ticker.add(tick);

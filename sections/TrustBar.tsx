@@ -1,5 +1,5 @@
 import { Star } from "lucide-react";
-import { copy, site } from "@/config/site";
+import { copy, site, withoutDelivery } from "@/config/site";
 import { tAll } from "@/lib/copy";
 
 export default function TrustBar() {
@@ -9,7 +9,7 @@ export default function TrustBar() {
   const items = [
     `${site.rating.toFixed(1)}\u2605 on Google`,
     `${site.reviews} reviews`,
-    ...tAll(copy.trustBar.items),
+    ...withoutDelivery(tAll(copy.trustBar.items)),
   ];
   return (
     <section aria-label="Trust signals" className="border-b border-sand bg-espresso py-4">

@@ -1,33 +1,76 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { Star } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { WhatsAppIcon } from "@/components/ui/WhatsAppIcon";
-import { brandAssets, copy, site, waLink } from "@/config/site";
+import { copy, heroSlides, logoMark, site, waLink } from "@/config/site";
 import { t } from "@/lib/copy";
 
-/** Hero slideshow images shared by every site (public/template/hero). Order is fixed: 01, 03, 04. */
-const HERO_SLIDES: string[] = ["/template/hero/01.webp", "/template/hero/03.webp", "/template/hero/04.webp"];
-const HERO_INTERVAL_MS = 1300;
+/** A new slide every 2s. Each one slides in from the right, so the show always moves forward. */
+const HERO_INTERVAL_MS = 2000;
+const SLIDE_MS = 1100;
+const SLIDE_EASE = "cubic-bezier(0.77, 0, 0.18, 1)";
 
 export default function Hero() {
   const mediaRef = useRef<HTMLDivElement>(null);
-  const [slide, setSlide] = useState<number>(0);
+  const slideRefs = useRef<(HTMLDivElement | null)[]>([]);
+  // `step` only ever increases; the visible slide is step % length.
+  const [step, setStep] = useState(0);
+  const count = heroSlides.length;
+  const current = step % count;
 
   useEffect(() => {
-    HERO_SLIDES.forEach((src) => {
+    heroSlides.forEach((s) => {
       const im = new window.Image();
-      im.src = src;
+      im.src = s.src;
     });
   }, []);
 
-  // Auto-advance; restarts after every change, so a manual click gets a full 1.3s before the next swap.
   useEffect(() => {
-    const id = window.setTimeout(() => setSlide((s) => (s + 1) % HERO_SLIDES.length), HERO_INTERVAL_MS);
-    return () => window.clearTimeout(id);
-  }, [slide]);
+    if (count < 2 || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const id = window.setInterval(() => {
+      if (!document.hidden) setStep((s) => s + 1);
+    }, HERO_INTERVAL_MS);
+    return () => window.clearInterval(id);
+  }, [count]);
 
-  const go = (dir: number) => setSlide((s) => (s + dir + HERO_SLIDES.length) % HERO_SLIDES.length);
+  // Incoming slide travels in from the right over the outgoing one, which drifts
+  // left a little (parallax). Everything else waits off-stage on the right.
+  useLayoutEffect(() => {
+    const prev = (step - 1 + count) % count;
+    slideRefs.current.forEach((el, i) => {
+      if (!el) return;
+      el.getAnimations().forEach((a) => a.cancel());
+      const img = el.firstElementChild as HTMLElement | null;
+      img?.getAnimations().forEach((a) => a.cancel());
+      if (i === current) {
+        el.style.zIndex = "2";
+        el.style.transform = "translateX(0)";
+        if (step > 0) {
+          el.animate([{ transform: "translateX(100%)" }, { transform: "translateX(0)" }], {
+            duration: SLIDE_MS,
+            easing: SLIDE_EASE,
+          });
+        }
+        img?.animate([{ transform: "scale(1.12)" }, { transform: "scale(1)" }], {
+          duration: HERO_INTERVAL_MS + SLIDE_MS,
+          easing: "cubic-bezier(0.22, 1, 0.36, 1)",
+          fill: "forwards",
+        });
+      } else if (i === prev && step > 0) {
+        el.style.zIndex = "1";
+        el.style.transform = "translateX(-30%)";
+        el.animate([{ transform: "translateX(0)" }, { transform: "translateX(-30%)" }], {
+          duration: SLIDE_MS,
+          easing: SLIDE_EASE,
+        });
+      } else {
+        el.style.zIndex = "0";
+        el.style.transform = "translateX(100%)";
+      }
+    });
+  }, [step, current, count]);
 
   useEffect(() => {
     const r = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -39,8 +82,7 @@ export default function Hero() {
       gsap.registerPlugin(ScrollTrigger);
       ctx = gsap.context(() => {
         gsap.to(mediaRef.current, {
-          scale: 1.08,
-          y: 60,
+          y: 80,
           ease: "none",
           scrollTrigger: { trigger: "#hero", start: "top top", end: "bottom top", scrub: true },
         });
@@ -50,122 +92,93 @@ export default function Hero() {
   }, []);
 
   return (
-    <section id="hero" className="relative h-[100svh] w-full overflow-hidden bg-espresso">
-      <div
-        ref={mediaRef}
-        className="absolute inset-0"
-        style={{ willChange: "transform", transform: "translateZ(0)", backfaceVisibility: "hidden" }}
-      >
-        {/* Fixed hero slideshow, identical on every site: 01 -> 03 -> 04, swapping every 1.3s, with prev/next arrows. */}
-        {HERO_SLIDES.map((src, i) => (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            key={src}
-            src={src}
-            alt={t(copy.hero.posterAlt)}
-            loading="eager"
-            decoding="async"
-            className="absolute inset-0 h-full w-full object-cover"
-            style={{ opacity: i === slide ? 1 : 0, transition: "opacity 150ms linear" }}
-          />
+    <section id="hero" className="relative h-[100svh] min-h-[600px] w-full overflow-hidden bg-espresso">
+      <div ref={mediaRef} className="absolute inset-0" style={{ willChange: "transform" }}>
+        {heroSlides.map((s, i) => (
+          <div
+            key={s.src}
+            ref={(el) => {
+              slideRefs.current[i] = el;
+            }}
+            className="absolute inset-0 overflow-hidden"
+            style={{ transform: i === 0 ? "translateX(0)" : "translateX(100%)", zIndex: i === 0 ? 2 : 0 }}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={s.src}
+              alt={i === current ? s.alt : ""}
+              aria-hidden={i !== current}
+              loading="eager"
+              decoding="async"
+              className="h-full w-full object-cover"
+              style={{ transformOrigin: "50% 60%" }}
+            />
+          </div>
         ))}
       </div>
 
       <div
-        className="absolute inset-0"
+        className="pointer-events-none absolute inset-0 z-[3]"
         style={{
           background:
-            "radial-gradient(120% 90% at 50% 30%, rgba(20,16,12,0.2) 0%, rgba(20,16,12,0.55) 60%, rgba(20,16,12,0.82) 100%), linear-gradient(to top, rgba(20,16,12,0.9) 0%, rgba(20,16,12,0) 45%)",
+            "radial-gradient(70% 55% at 50% 50%, rgba(20,16,12,0.5) 0%, rgba(20,16,12,0.25) 100%), radial-gradient(110% 80% at 50% 45%, rgba(20,16,12,0.2) 0%, rgba(20,16,12,0.55) 60%, rgba(20,16,12,0.85) 100%), linear-gradient(to top, rgba(20,16,12,0.92) 0%, rgba(20,16,12,0) 50%)",
         }}
       />
 
-      <div className="relative z-10 mx-auto flex h-full max-w-shell flex-col items-center justify-center px-6 text-center">
-        <p className="eyebrow" style={{ color: "#ffffff", textShadow: "0 1px 20px rgba(255,255,255,0.45)" }}>
+      <div className="relative z-10 mx-auto flex h-full max-w-shell flex-col items-center justify-center px-6 pt-16 text-center">
+        {logoMark && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={logoMark} alt="" aria-hidden className="mb-5 h-14 w-14 object-contain md:h-16 md:w-16" />
+        )}
+        <p className="eyebrow eyebrow-center" style={{ color: "rgba(255,255,255,0.85)" }}>
           {t(copy.hero.eyebrow)}
         </p>
-        <h1 className="mt-5 flex flex-col items-center">
-          <span
-            className="display-xl"
-            style={{ color: "#ffffff", fontSize: "clamp(2.9rem, 7vw, 5.6rem)", textShadow: "0 2px 34px rgba(255,255,255,0.4)" }}
-          >
+        <h1 className="mt-4 flex flex-col items-center">
+          <span className="display-xl text-ivory" style={{ fontSize: "clamp(3.4rem, 9vw, 7rem)", textShadow: "0 4px 40px rgba(0,0,0,0.35)" }}>
             {site.name}
           </span>
           <span
-            className="display mt-1"
-            style={{ fontSize: "clamp(1.05rem, 2.6vw, 2rem)", letterSpacing: "0.06em", color: "#ffffff" }}
+            className="mt-2 font-sans text-[0.78rem] font-semibold uppercase md:text-sm"
+            style={{ letterSpacing: "0.42em", paddingLeft: "0.42em", color: "#F1D9A6", textShadow: "0 1px 16px rgba(0,0,0,0.6)" }}
           >
             {site.descriptor}
           </span>
         </h1>
 
-        {/* Local hero headline — falls back to the tagline when unset (config/event-schema.ts brand.headline). */}
-        <p
-          className="mt-5 max-w-xl font-sans text-lg font-medium leading-snug"
-          style={{ color: "#ffffff", textShadow: "0 1px 20px rgba(0,0,0,0.35)" }}
-        >
+        <p className="display mt-7 max-w-2xl italic" style={{ fontSize: "clamp(1.25rem, 2.6vw, 1.9rem)", color: "rgba(255,255,255,0.95)" }}>
           {site.headline}
         </p>
 
-        {site.taglineMl && (
-          <p className="mt-1 max-w-xl font-sans text-sm font-light" style={{ color: "rgba(255,255,255,0.85)" }}>
-            {site.taglineMl}
-          </p>
+        {site.taglineMl && <p className="mt-2 max-w-xl font-sans text-sm font-light text-ivory/80">{site.taglineMl}</p>}
+
+        {site.reviews > 0 && (
+          <a
+            href={site.mapsLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-7 inline-flex items-center gap-2.5 rounded-full border border-ivory/25 bg-ivory/10 px-4 py-2 font-sans text-xs text-ivory backdrop-blur-sm transition-colors hover:bg-ivory/15 md:text-sm"
+          >
+            <span className="flex gap-0.5" aria-hidden>
+              {Array.from({ length: 5 }).map((_, i) => (
+                <Star key={i} size={13} className="fill-saffron text-saffron" />
+              ))}
+            </span>
+            <span>
+              <strong className="font-semibold">{site.rating.toFixed(1)}</strong> · {site.reviews} Google reviews
+            </span>
+          </a>
         )}
 
-        <p
-          className="mt-6 max-w-xl font-sans text-base font-light leading-relaxed"
-          style={{ color: "rgba(255,255,255,0.9)", textShadow: "0 1px 20px rgba(0,0,0,0.4)" }}
-        >
-          {t(copy.hero.body)}
-        </p>
-
-        {site.highlights.length > 0 && (
-          <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
-            {site.highlights.map((h) => (
-              <span
-                key={h}
-                className="rounded-full border px-3.5 py-1.5 font-sans text-xs font-medium"
-                style={{ borderColor: "rgba(255,255,255,0.35)", color: "#ffffff", background: "rgba(255,255,255,0.08)" }}
-              >
-                {h}
-              </span>
-            ))}
-          </div>
-        )}
-
-        <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
-          <Button href={waLink()} variant="whatsapp" external>
-            <WhatsAppIcon size={18} /> {copy.cta.primary}
-          </Button>
-          <Button href="#gallery" variant="outline" className="border-ivory/60 text-ivory hover:bg-ivory/10">
+        <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+          <Button href={copy.cta.primaryHref} variant="gold">
             {copy.cta.secondary}
+          </Button>
+          <Button href={waLink()} variant="outline" external className="border-ivory/50 text-ivory hover:bg-ivory/10">
+            <WhatsAppIcon size={17} /> {copy.cta.whatsapp}
           </Button>
         </div>
       </div>
 
-      {/* Hero slideshow arrows (small, both sides). */}
-      {[
-        { dir: -1, label: "Previous image", d: "M15 18l-6-6 6-6", side: "left-3 md:left-5" },
-        { dir: 1, label: "Next image", d: "M9 6l6 6-6 6", side: "right-3 md:right-5" },
-      ].map((a) => (
-        <button
-          key={a.dir}
-          type="button"
-          aria-label={a.label}
-          onClick={() => go(a.dir)}
-          className={`absolute top-1/2 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full ${a.side}`}
-          style={{ background: "rgba(0,0,0,0.35)", border: "1px solid rgba(255,255,255,0.45)", color: "#ffffff", cursor: "pointer" }}
-        >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-            <path d={a.d} />
-          </svg>
-        </button>
-      ))}
-
-      <div className="absolute inset-x-0 bottom-6 z-10 flex flex-col items-center gap-2">
-        <span className="block h-10 w-px origin-bottom" style={{ background: "var(--saffron)", animation: "scroll-hint 2.2s ease-in-out infinite" }} />
-        <span className="eyebrow text-ivory/60">{copy.hero.scroll}</span>
-      </div>
     </section>
   );
 }

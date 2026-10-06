@@ -6,13 +6,13 @@ import Gallery from "@/sections/Gallery";
 import Process from "@/sections/Process";
 import About from "@/sections/About";
 import Testimonials from "@/sections/Testimonials";
-import Contact from "@/sections/Contact";
-import InstagramCta from "@/sections/Instagram";
+import Menu from "@/sections/Menu";
 import Footer from "@/sections/Footer";
 import { variant } from "@/config/site";
 
 /**
- * Page order follows the AIDA conversion journey, but the middle block
+ * Page order follows the AIDA conversion journey — hero, proof, offer, reviews,
+ * then the menu quote builder as the close and the visit/map footer — but the middle block
  * (Services / Gallery / Process / About) reorders per `event.variant`
  * (config/event-schema.ts) so the lead offer matches the business:
  *
@@ -46,8 +46,7 @@ export default function HomePage() {
         return <Section key={key} />;
       })}
       <Testimonials />
-      <Contact />
-      <InstagramCta />
+      <Menu />
       <Footer />
     </main>
   );

@@ -32,6 +32,32 @@ export interface EventImage {
  */
 export type GalleryEntry = MediaPath | { src: MediaPath; alt?: string; caption?: string };
 
+/** One dish on the quote-builder menu. */
+export interface MenuItem {
+  /** Stable id, unique across the whole menu. */
+  id: string;
+  name: string;
+  /** Malayalam name shown under the English one. */
+  ml?: string;
+  note?: string;
+  veg?: boolean;
+}
+
+export interface MenuCategory {
+  id: string;
+  title: string;
+  /** Malayalam category title. */
+  ml?: string;
+  items: MenuItem[];
+}
+
+export interface MenuPreset {
+  title: string;
+  note: string;
+  /** MenuItem ids. */
+  items: string[];
+}
+
 export interface EventReview {
   name: string;
   rating: number;
@@ -77,6 +103,8 @@ export interface EventConfig {
     phone: string;
     /** wa.me digits only, e.g. "919495163651". */
     whatsapp: string;
+    /** Optional second display phone, shown in the footer. */
+    phoneAlt?: string;
     email?: string;
   };
 
@@ -149,6 +177,13 @@ export interface EventConfig {
     base: string;
     /** Hero still — also used when the visitor prefers reduced motion. */
     heroPoster: MediaPath;
+    /**
+     * Hero slideshow, in order. Each slide slides in from the right, always
+     * moving forward. Falls back to the template's stock hero slides when unset.
+     */
+    heroSlides?: GalleryEntry[];
+    /** Transparent brand mark (PNG/SVG) used in the loader and header. Optional. */
+    logoMark?: MediaPath;
     /** 1200x630 social share image. */
     ogImage: MediaPath;
     /** Favicon/app-icon folder for this brand. */
@@ -186,5 +221,9 @@ export interface EventConfig {
     process?: { n: string; title: string; text: string }[];
     /** About paragraph — supports {tokens}; see config/template.ts. */
     aboutBody?: string;
+    /** Replace the shared Kerala wedding menu (config/template.ts `templateMenu`). */
+    menu?: MenuCategory[];
+    /** Replace the shared "start from a classic menu" presets. Item ids must exist in the menu. */
+    menuPresets?: MenuPreset[];
   };
 }

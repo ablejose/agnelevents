@@ -15,9 +15,10 @@
  * Available events:
  *   demo     -> events/demo.config.ts     (dummy data; what the hosted preview shows)
  *   madeena  -> events/madeena.config.ts  (Madeena Catering, Perintalmanna)
+ *   agnel    -> events/agnel.config.ts    (Agnel Caters & Events, Changanassery)
  */
-import { demo } from "@/events/demo.config";
+import { agnel } from "@/events/agnel.config";
 
-export const event = demo;
+export const event = agnel;
 
 export default event;

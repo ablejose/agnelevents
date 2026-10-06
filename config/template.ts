@@ -13,7 +13,7 @@
  * Anything here can be overridden per event via `overrides` in events/<slug>.config.ts.
  */
 
-import type { EventVariant } from "@/config/event-schema";
+import type { EventVariant, MenuCategory, MenuPreset } from "@/config/event-schema";
 
 export interface TemplateService {
   id: string;
@@ -65,23 +65,170 @@ export const templateProcess: TemplateStep[] = [
   { n: "05", title: "Serve & manage", text: "Trained crew serve hot and keep the day running — so you get to enjoy the occasion." },
 ];
 
+/**
+ * KERALA WEDDING MENU — the quote builder's dish list. Shared across events;
+ * a client with a different spread sets `overrides.menu`. No prices: the
+ * visitor picks dishes + guest count and asks for a quote on WhatsApp.
+ */
+export const templateMenu: MenuCategory[] = [
+  {
+    id: "welcome",
+    title: "Welcome Drinks",
+    ml: "സ്വാഗത പാനീയം",
+    items: [
+      { id: "lime-soda", name: "Fresh Lime Soda", ml: "നാരങ്ങ സോഡ", note: "Sweet, salted or mint", veg: true },
+      { id: "nannari", name: "Nannari Sarbath", ml: "നന്നാരി സർബത്ത്", note: "Sarsaparilla syrup, lime and ice", veg: true },
+      { id: "tender-coconut", name: "Tender Coconut Water", ml: "ഇളനീർ", note: "Chilled, served in glass", veg: true },
+      { id: "watermelon", name: "Watermelon Juice", ml: "തണ്ണിമത്തൻ ജ്യൂസ്", note: "Fresh-pressed with mint", veg: true },
+      { id: "passion-fruit", name: "Passion Fruit Juice", ml: "പാഷൻ ഫ്രൂട്ട് ജ്യൂസ്", note: "Tangy, bright and cold", veg: true },
+    ],
+  },
+  {
+    id: "starters",
+    title: "Starters",
+    ml: "സ്റ്റാർട്ടേഴ്സ്",
+    items: [
+      { id: "veg-cutlet", name: "Vegetable Cutlet", ml: "വെജിറ്റബിൾ കട്ലറ്റ്", note: "Crumbed, with tomato sauce", veg: true },
+      { id: "beef-cutlet", name: "Beef Cutlet", ml: "ബീഫ് കട്ലറ്റ്", note: "The Kottayam wedding classic", veg: false },
+      { id: "chicken-lollipop", name: "Chicken Lollipop", ml: "ചിക്കൻ ലോലിപോപ്പ്", note: "Crisp, spiced, finger food", veg: false },
+      { id: "fish-fingers", name: "Fish Fingers", ml: "ഫിഷ് ഫിംഗർ", note: "Seer fish, golden fried", veg: false },
+      { id: "paneer-tikka", name: "Paneer Tikka", ml: "പനീർ ടിക്ക", note: "Charred in a spiced marinade", veg: true },
+    ],
+  },
+  {
+    id: "sadya",
+    title: "Kerala Sadya",
+    ml: "സദ്യ",
+    items: [
+      { id: "avial", name: "Avial", ml: "അവിയൽ", note: "Mixed vegetables in coconut and curd", veg: true },
+      { id: "thoran", name: "Thoran", ml: "തോരൻ", note: "Stir-fried vegetables with grated coconut", veg: true },
+      { id: "olan", name: "Olan", ml: "ഓലൻ", note: "Ash gourd and cowpeas in coconut milk", veg: true },
+      { id: "kaalan", name: "Kaalan", ml: "കാളൻ", note: "Yam and raw banana in thick curd", veg: true },
+      { id: "erissery", name: "Erissery", ml: "എരിശ്ശേരി", note: "Pumpkin and red beans, roasted coconut", veg: true },
+      { id: "sambar", name: "Sambar", ml: "സാമ്പാർ", note: "Lentils and vegetables, tamarind base", veg: true },
+      { id: "parippu", name: "Parippu & Ghee", ml: "പരിപ്പും നെയ്യും", note: "Moong dal served with ghee", veg: true },
+      { id: "pulissery", name: "Pulissery", ml: "പുളിശ്ശേരി", note: "Spiced buttermilk curry", veg: true },
+      { id: "inji-puli", name: "Inji Puli", ml: "ഇഞ്ചിപ്പുളി", note: "Sweet-sour ginger and tamarind", veg: true },
+      { id: "pachadi-kichadi", name: "Pachadi & Kichadi", ml: "പച്ചടി, കിച്ചടി", note: "Pineapple pachadi, cucumber kichadi", veg: true },
+      { id: "pappadam-upperi", name: "Pappadam & Upperi", ml: "പപ്പടം, ഉപ്പേരി", note: "With banana chips and sharkara varatti", veg: true },
+    ],
+  },
+  {
+    id: "breads-rice",
+    title: "Appam, Breads & Rice",
+    ml: "അപ്പം, ചോറ്",
+    items: [
+      { id: "palappam", name: "Palappam", ml: "പാലപ്പം", note: "Lacy-edged, soft centre", veg: true },
+      { id: "idiyappam", name: "Idiyappam", ml: "ഇടിയപ്പം", note: "Steamed string hoppers", veg: true },
+      { id: "porotta", name: "Kerala Porotta", ml: "പൊറോട്ട", note: "Flaky, layered, hand-beaten", veg: true },
+      { id: "ghee-rice", name: "Ghee Rice", ml: "നെയ്ച്ചോറ്", note: "With cashews and fried onion", veg: true },
+      { id: "chicken-biriyani", name: "Chicken Biriyani", ml: "ചിക്കൻ ബിരിയാണി", note: "Kaima rice, dum-cooked", veg: false },
+      { id: "matta-rice", name: "Kerala Matta Rice", ml: "കുത്തരി ചോറ്", note: "Red parboiled rice", veg: true },
+    ],
+  },
+  {
+    id: "non-veg",
+    title: "Wedding Specials",
+    ml: "നോൺ-വെജ്",
+    items: [
+      { id: "chicken-stew", name: "Chicken Stew", ml: "ചിക്കൻ സ്റ്റൂ", note: "Coconut milk, whole spices — with appam", veg: false },
+      { id: "mutton-stew", name: "Mutton Stew", ml: "മട്ടൻ സ്റ്റൂ", note: "Slow-cooked, mild and creamy", veg: false },
+      { id: "chicken-roast", name: "Nadan Chicken Roast", ml: "നാടൻ ചിക്കൻ റോസ്റ്റ്", note: "Onion-pepper masala, dry roasted", veg: false },
+      { id: "beef-ularthiyathu", name: "Beef Ularthiyathu", ml: "ബീഫ് ഉലർത്തിയത്", note: "Coconut slivers, curry leaves, black pepper", veg: false },
+      { id: "duck-roast", name: "Duck Roast", ml: "താറാവ് റോസ്റ്റ്", note: "Kuttanad-style, rich and peppery", veg: false },
+      { id: "fish-curry", name: "Kottayam Fish Curry", ml: "കോട്ടയം മീൻ കറി", note: "Red curry soured with kudampuli", veg: false },
+      { id: "fish-moilee", name: "Fish Moilee", ml: "മീൻ മോളി", note: "Mild coconut milk curry", veg: false },
+      { id: "karimeen", name: "Karimeen Pollichathu", ml: "കരിമീൻ പൊള്ളിച്ചത്", note: "Pearl spot, masala-wrapped in banana leaf", veg: false },
+      { id: "pork-ularthiyathu", name: "Pork Ularthiyathu", ml: "പോർക്ക് ഉലർത്തിയത്", note: "Dry-roasted, central Travancore style", veg: false },
+    ],
+  },
+  {
+    id: "veg-mains",
+    title: "Vegetarian Mains",
+    ml: "വെജിറ്റേറിയൻ",
+    items: [
+      { id: "veg-stew", name: "Vegetable Stew", ml: "വെജിറ്റബിൾ സ്റ്റൂ", note: "Coconut milk, mild spices", veg: true },
+      { id: "kadala-curry", name: "Kadala Curry", ml: "കടല കറി", note: "Black chickpeas, roasted coconut", veg: true },
+      { id: "paneer-butter-masala", name: "Paneer Butter Masala", ml: "പനീർ ബട്ടർ മസാല", note: "Silky tomato and cashew gravy", veg: true },
+      { id: "mushroom-pepper", name: "Mushroom Pepper Fry", ml: "കൂൺ കുരുമുളക് ഫ്രൈ", note: "Tossed with crushed pepper", veg: true },
+    ],
+  },
+  {
+    id: "desserts",
+    title: "Payasam & Desserts",
+    ml: "പായസം",
+    items: [
+      { id: "ada-pradhaman", name: "Ada Pradhaman", ml: "അട പ്രഥമൻ", note: "Rice ada, jaggery and coconut milk", veg: true },
+      { id: "palada", name: "Palada Payasam", ml: "പാലട പായസം", note: "Pink, creamy, slow-reduced milk", veg: true },
+      { id: "parippu-pradhaman", name: "Parippu Pradhaman", ml: "പരിപ്പ് പ്രഥമൻ", note: "Moong dal and jaggery", veg: true },
+      { id: "semiya", name: "Semiya Payasam", ml: "സേമിയ പായസം", note: "Vermicelli, milk and cardamom", veg: true },
+      { id: "caramel-pudding", name: "Caramel Pudding", ml: "കാരമൽ പുഡ്ഡിംഗ്", note: "The wedding-table favourite", veg: true },
+      { id: "fruit-salad", name: "Fruit Salad & Ice Cream", ml: "ഫ്രൂട്ട് സാലഡ്", note: "Fresh-cut fruit, vanilla scoop", veg: true },
+      { id: "gulab-jamun", name: "Gulab Jamun", ml: "ഗുലാബ് ജാമുൻ", note: "Warm, in rose-cardamom syrup", veg: true },
+    ],
+  },
+  {
+    id: "live",
+    title: "Live Counters",
+    ml: "ലൈവ് കൗണ്ടർ",
+    items: [
+      { id: "live-appam", name: "Live Appam & Stew", ml: "അപ്പം ലൈവ്", note: "Appams off the pan, stew alongside", veg: false },
+      { id: "kappa-meen", name: "Kappa & Meen Curry", ml: "കപ്പയും മീൻ കറിയും", note: "Tapioca with red fish curry", veg: false },
+      { id: "live-dosa", name: "Live Dosa Counter", ml: "ദോശ ലൈവ്", note: "Ghee roast, masala and plain", veg: true },
+      { id: "chaat", name: "Chaat Counter", ml: "ചാട്ട്", note: "Pani puri, bhel and dahi puri", veg: true },
+      { id: "ice-cream", name: "Ice Cream Station", ml: "ഐസ്ക്രീം", note: "Scoops with toppings", veg: true },
+      { id: "chaya", name: "Chaya & Palaharam", ml: "ചായയും പലഹാരവും", note: "Kerala tea with evening snacks", veg: true },
+    ],
+  },
+];
+
+/** Starting points for the quote builder — tap one, then add or remove dishes. */
+export const templateMenuPresets: MenuPreset[] = [
+  {
+    title: "Traditional Sadya",
+    note: "On banana leaf, with two payasams",
+    items: [
+      "matta-rice", "parippu", "sambar", "avial", "thoran", "olan", "kaalan", "erissery", "pulissery",
+      "inji-puli", "pachadi-kichadi", "pappadam-upperi", "ada-pradhaman", "palada",
+    ],
+  },
+  {
+    title: "Christian Wedding Feast",
+    note: "Appam, stew, roasts and pudding",
+    items: [
+      "lime-soda", "beef-cutlet", "palappam", "chicken-stew", "beef-ularthiyathu", "duck-roast",
+      "fish-curry", "ghee-rice", "veg-stew", "caramel-pudding", "fruit-salad",
+    ],
+  },
+  {
+    title: "Reception Buffet",
+    note: "Starters, biriyani and live counters",
+    items: [
+      "passion-fruit", "chicken-lollipop", "paneer-tikka", "porotta", "chicken-biriyani", "chicken-roast",
+      "paneer-butter-masala", "live-dosa", "gulab-jamun", "ice-cream",
+    ],
+  },
+];
+
 /** Every string the sections render. Tokens are filled from the event config. */
 export const templateCopy = {
   nav: [
     { label: "Services", href: "#services" },
     { label: "Our work", href: "#gallery" },
-    { label: "How we work", href: "#process" },
-    { label: "About", href: "#about" },
+    { label: "Reviews", href: "#testimonials" },
+    { label: "Menu", href: "#menu" },
     { label: "Contact", href: "#contact" },
   ],
 
   cta: {
-    primary: "Plan your event",
+    primary: "Get a quote",
+    /** Where the header + hero quote buttons lead (the menu quote builder). */
+    primaryHref: "#menu",
     whatsapp: "Chat on WhatsApp",
-    secondary: "View our work",
+    secondary: "Build your menu",
     /** Prefilled WhatsApp enquiry used by the header, hero and the floating button. */
     waMessage: "Hi {brand}, I found your website and would like to enquire.",
-    waFormIntro: "Hi {brand}, I'd like to plan an event.",
+    waQuoteIntro: "Hi {brand}, I'd like a quote for my event.",
   },
 
   hero: {
@@ -94,6 +241,8 @@ export const templateCopy = {
   trustBar: {
     /** Extra pills after the rating/review ones. */
     items: ["{hours}", "Delivery available", "{city}, {region}"],
+    /** Dropped from items/points when the event sets `location.delivery: false`. */
+    deliveryLabel: "Delivery available",
   },
 
   quickServices: {
@@ -113,8 +262,8 @@ export const templateCopy = {
     heading: "Imagine your event like this",
     body: "Real weddings and functions we've catered and styled across {district} — the spreads, the stage and the crowd on the day.",
     photoQuote: "Every plate, petal and place setting — styled by hand.",
-    photoBody: "A closer look at the spreads, stages and tables we create on the day — tap any photo to see it full-size.",
-    photoHint: "Tap the photo to view it full-size",
+    showAll: "Show all {count} photos",
+    showLess: "Show fewer",
   },
 
   process: {
@@ -140,33 +289,56 @@ export const templateCopy = {
     sourceLabel: "Google review",
   },
 
-  contact: {
-    eyebrow: "Plan your event",
-    heading: "Let's plan your event together.",
-    body: "Share a few details and we'll pick it up on WhatsApp — with a menu and a clear quote.",
-    image: "/template/plan-your-event.webp",
-    imageAlt: "Illustration of a wedding planner guiding a couple under a floral arch",
-    ratingLine: "Rated {rating} on Google · {reviews} reviews · {hours}",
-    submit: "Send on WhatsApp",
-    submitNote: "Opens WhatsApp with your details ready to send.",
-    fields: {
-      email: "Your Email",
-      emailPlaceholder: "you@email.com",
-      phone: "Your Phone",
-      phonePlaceholder: "Your phone number",
-      address: "Your Address",
-      addressPlaceholder: "Town / venue",
-      message: "Message",
-      messagePlaceholder: "Event type, date and guest count",
-    },
-    directions: "Get directions",
+  menu: {
+    eyebrow: "The menu",
+    heading: "Design your feast, course by course.",
+    body: "Choose from our Kerala wedding favourites, tell us how many guests and what you have in mind — and get a quote made for your day.",
+    steps: ["Pick your dishes", "Set your guests", "Get your quote"],
+    courseLabel: "Course",
+    of: "of",
+    addAll: "Add all",
+    removeAll: "Remove all",
+    prev: "Previous",
+    next: "Next course",
+    done: "Review & get quote",
+    picked: "added",
+    presetsLabel: "Start from a classic",
+    add: "Add",
+    remove: "Remove",
+    veg: "Veg",
+    nonVeg: "Non-veg",
+    listTitle: "Your menu card",
+    listEmpty: "Your menu card is empty — tap + beside any dish to start.",
+    coverage: "Courses covered",
+    nameLabel: "Name on the menu",
+    namePlaceholder: "e.g. Anu & Joel",
+    notesLabel: "Anything special?",
+    notesPlaceholder: "Less spice, more vegetarian, an extra live counter, a theme…",
+    clear: "Clear",
+    guestsLabel: "Number of guests",
+    guestsUnit: "guests",
+    eventLabel: "Occasion",
+    eventTypes: ["Wedding", "Engagement", "Reception", "Baptism", "House function", "Corporate"],
+    dateLabel: "Event date",
+    dateOptional: "optional",
+    submit: "Ask for a quote",
+    submitNote: "Free and no obligation — opens WhatsApp with your menu ready to send.",
+    toastAdded: "added to your menu",
+    mobileBarCta: "Get quote",
+    waName: "Name",
+    waNotes: "Special requests",
+    waGuests: "Guests",
+    waEvent: "Occasion",
+    waDate: "Date",
+    waMenu: "My menu",
+    waOutro: "Please share a quote and your availability. Thank you!",
   },
 
-  instagram: {
-    eyebrow: "Follow our work",
-    heading: "See every celebration, in motion",
-    body: "Full event films, reels and behind-the-scenes from real weddings and functions — all live on our Instagram.",
-    cta: "View our videos on Instagram",
+  visit: {
+    eyebrow: "Visit us",
+    heading: "Let's make it unforgettable.",
+    body: "Call, WhatsApp or drop by — we'll walk you through menus, décor and dates.",
+    directions: "Get directions",
   },
 
   footer: {

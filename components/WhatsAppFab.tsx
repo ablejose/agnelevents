@@ -8,6 +8,20 @@ import { waLink } from "@/config/site";
 export default function WhatsAppFab() {
   const [visible, setVisible] = useState(false);
   const [pulsed, setPulsed] = useState(false);
+  // Step aside while a section with its own WhatsApp action (the menu quote panel) is on screen.
+  const [covered, setCovered] = useState(false);
+
+  useEffect(() => {
+    const targets = document.querySelectorAll("[data-hide-fab]");
+    if (!targets.length) return;
+    const on = new Set<Element>();
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => (e.isIntersecting ? on.add(e.target) : on.delete(e.target)));
+      setCovered(on.size > 0);
+    });
+    targets.forEach((t) => io.observe(t));
+    return () => io.disconnect();
+  }, []);
 
   useEffect(() => {
     const onScroll = () => {
@@ -21,7 +35,7 @@ export default function WhatsAppFab() {
 
   return (
     <AnimatePresence>
-      {visible && (
+      {visible && !covered && (
         <motion.a
           href={waLink()}
           target="_blank"

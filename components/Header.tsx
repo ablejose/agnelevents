@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "motion/react";
 import { Menu, X, Phone } from "lucide-react";
-import { site, navLinks, telLink, waLink, copy } from "@/config/site";
+import { site, navLinks, telLink, waLink, copy, logoMark } from "@/config/site";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
 
@@ -71,12 +71,18 @@ export default function Header() {
       )}
     >
       <div className="mx-auto flex max-w-shell items-center justify-between px-5 py-4 md:px-8">
-        <Link href="/" className="flex flex-col leading-none" aria-label={`${site.fullName} home`}>
+        <Link href="/" className="flex items-center gap-3 leading-none" aria-label={`${site.fullName} home`}>
+          {logoMark && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={logoMark} alt="" aria-hidden className="h-9 w-9 object-contain" />
+          )}
+          <span className="flex flex-col">
           <span className={cn("font-display text-2xl tracking-wide transition-colors", solid ? "text-espresso" : "text-ivory")}>
             {site.name}
           </span>
           <span className={cn("mt-0.5 font-sans text-[0.6rem] uppercase tracking-[0.24em] transition-colors", solid ? "text-saffron-2" : "text-ivory/70")}>
             {site.kicker}
+          </span>
           </span>
         </Link>
 
@@ -103,7 +109,7 @@ export default function Header() {
           >
             <Phone size={16} />
           </a>
-          <Button href={waLink()} variant="primary" external>
+          <Button href={copy.cta.primaryHref} variant={solid ? "primary" : "gold"}>
             {copy.cta.primary}
           </Button>
         </div>

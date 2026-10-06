@@ -58,12 +58,38 @@ html.lenis body {
   color: var(--espresso);
 }
 .eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.85rem;
   font-family: var(--font-manrope), sans-serif;
   font-size: 0.72rem;
   font-weight: 500;
   letter-spacing: 0.26em;
   text-transform: uppercase;
   color: var(--saffron-2);
+}
+/* One gold rule before every eyebrow — the thread that ties the sections together. */
+.eyebrow::before {
+  content: "";
+  width: 2rem;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.7;
+}
+/* Centred eyebrows get a rule on both sides. */
+.eyebrow-center {
+  justify-content: center;
+}
+.eyebrow-center::after {
+  content: "";
+  width: 2rem;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.7;
+}
+
+html {
+  scroll-padding-top: 72px;
 }
 .body-copy {
   font-family: var(--font-manrope), sans-serif;
@@ -124,6 +150,53 @@ html.lenis body {
   }
 }
 
+@keyframes hero-progress {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+/* Guest-count slider in the menu quote builder. --fill is set inline (0-100%). */
+.guest-range {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  border-radius: 999px;
+  background: linear-gradient(to right, var(--saffron) 0 var(--fill, 0%), rgba(255, 255, 255, 0.15) var(--fill, 0%) 100%);
+  outline: none;
+  cursor: pointer;
+}
+.guest-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #fff;
+  border: 5px solid var(--saffron);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+  transition: transform 0.2s;
+}
+.guest-range::-webkit-slider-thumb:hover,
+.guest-range:active::-webkit-slider-thumb {
+  transform: scale(1.15);
+}
+.guest-range::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #fff;
+  border: 5px solid var(--saffron);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+}
+.guest-range:focus-visible {
+  outline: 2px solid var(--saffron);
+  outline-offset: 6px;
+}
+
 /* Right-to-left image strip (Our work) */
 @keyframes marquee-rtl {
   from {
@@ -154,5 +227,24 @@ html.lenis body {
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+/* Quote button: a soft light sweep every few seconds to draw the eye. */
+.quote-cta::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(110deg, transparent 35%, rgba(255, 255, 255, 0.45) 50%, transparent 65%);
+  transform: translateX(-120%);
+  animation: quote-shine 3.6s ease-in-out 1.5s infinite;
+}
+@keyframes quote-shine {
+  0% {
+    transform: translateX(-120%);
+  }
+  40%,
+  100% {
+    transform: translateX(120%);
   }
 }

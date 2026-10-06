@@ -5,6 +5,7 @@
 import { event } from "@/event.config";
 import { templateCopy, variantCopy } from "@/config/template";
 import { t, asset } from "@/lib/copy";
+import type { GalleryEntry } from "@/config/event-schema";
 
 export { event };
 
@@ -38,6 +39,8 @@ export const site = {
   region: event.location.region,
   area: event.location.area,
   phone: event.contact.phone,
+  phoneAlt: event.contact.phoneAlt,
+  email: event.contact.email,
   whatsapp: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || event.contact.whatsapp,
   address: event.location.address,
   serviceAreas: event.location.serviceAreas,
@@ -55,6 +58,23 @@ export const site = {
   /** Short service cards for the quick-glance grid. Empty when unset. */
   quickServices: event.services ?? [],
 } as const;
+
+/** Drops the "Delivery available" line from shared lists when the event doesn't deliver. */
+export const withoutDelivery = (list: string[]) =>
+  site.delivery ? list : list.filter((s) => s !== templateCopy.trustBar.deliveryLabel);
+
+/** Stock hero slides shared by every site that sets no `media.heroSlides`. */
+const TEMPLATE_HERO_SLIDES = ["/template/hero/01.webp", "/template/hero/03.webp", "/template/hero/04.webp"];
+
+const slide = (e: GalleryEntry, i: number) =>
+  typeof e === "string"
+    ? { src: asset(e), alt: `${event.brand.fullName} — celebration ${i + 1}` }
+    : { src: asset(e.src), alt: e.alt ?? e.caption ?? `${event.brand.fullName} — celebration ${i + 1}` };
+
+export const heroSlides = (event.media.heroSlides ?? TEMPLATE_HERO_SLIDES).map(slide);
+
+/** Optional transparent brand mark for the loader + header. */
+export const logoMark = event.media.logoMark ? asset(event.media.logoMark) : undefined;
 
 export const DEFAULT_WA_MESSAGE = t(templateCopy.cta.waMessage);
 

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 
-type Variant = "primary" | "outline" | "whatsapp" | "ghost";
+type Variant = "primary" | "gold" | "outline" | "whatsapp" | "ghost";
 
 const base =
   "inline-flex items-center justify-center gap-2 font-sans text-sm font-medium transition-all duration-300 select-none";
@@ -9,6 +9,8 @@ const base =
 const variants: Record<Variant, string> = {
   primary:
     "rounded-full bg-espresso text-ivory px-7 py-3.5 hover:bg-ink hover:-translate-y-0.5 hover:shadow-[0_12px_30px_-12px_rgba(36,28,21,0.6)]",
+  gold:
+    "rounded-full bg-saffron text-espresso font-semibold px-7 py-3.5 hover:-translate-y-0.5 hover:brightness-110 hover:shadow-[0_16px_36px_-14px_rgba(196,137,46,0.75)]",
   outline:
     "rounded-full border border-saffron text-espresso px-7 py-3.5 hover:bg-[var(--saffron-soft)] hover:-translate-y-0.5",
   whatsapp:
