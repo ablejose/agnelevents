@@ -36,8 +36,19 @@ export default function Hero() {
         className="absolute inset-0"
         style={{ willChange: "transform", transform: "translateZ(0)", backfaceVisibility: "hidden" }}
       >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={brandAssets.heroPoster} alt={t(copy.hero.posterAlt)} className="h-full w-full object-cover" />
+        {/* Fixed hero slideshow, identical on every site: 01 -> 03 -> 04, swapping every 0.8s. */}
+        {HERO_SLIDES.map((src, i) => (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            key={src}
+            src={src}
+            alt={t(copy.hero.posterAlt)}
+            loading="eager"
+            decoding="async"
+            className="absolute inset-0 h-full w-full object-cover"
+            style={{ opacity: i === slide ? 1 : 0, transition: "opacity 150ms linear" }}
+          />
+        ))}
       </div>
 
       <div
