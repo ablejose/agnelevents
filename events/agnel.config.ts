@@ -47,7 +47,7 @@ export const agnel: EventConfig = {
   },
 
   web: {
-    url: "https://agnel-caters.vercel.app",
+    url: "https://agnelevents-two.vercel.app",
     instagram: "https://www.instagram.com/agnelcatersandevents/",
   },
 
