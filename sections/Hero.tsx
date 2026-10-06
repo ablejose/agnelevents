@@ -8,7 +8,7 @@ import { t } from "@/lib/copy";
 
 /** Hero slideshow images shared by every site (public/template/hero). Order is fixed: 01, 03, 04. */
 const HERO_SLIDES: string[] = ["/template/hero/01.webp", "/template/hero/03.webp", "/template/hero/04.webp"];
-const HERO_INTERVAL_MS = 800;
+const HERO_INTERVAL_MS = 1300;
 
 export default function Hero() {
   const mediaRef = useRef<HTMLDivElement>(null);
@@ -19,9 +19,15 @@ export default function Hero() {
       const im = new window.Image();
       im.src = src;
     });
-    const id = window.setInterval(() => setSlide((s) => (s + 1) % HERO_SLIDES.length), HERO_INTERVAL_MS);
-    return () => window.clearInterval(id);
   }, []);
+
+  // Auto-advance; restarts after every change, so a manual click gets a full 1.3s before the next swap.
+  useEffect(() => {
+    const id = window.setTimeout(() => setSlide((s) => (s + 1) % HERO_SLIDES.length), HERO_INTERVAL_MS);
+    return () => window.clearTimeout(id);
+  }, [slide]);
+
+  const go = (dir: number) => setSlide((s) => (s + dir + HERO_SLIDES.length) % HERO_SLIDES.length);
 
   useEffect(() => {
     const r = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -50,7 +56,7 @@ export default function Hero() {
         className="absolute inset-0"
         style={{ willChange: "transform", transform: "translateZ(0)", backfaceVisibility: "hidden" }}
       >
-        {/* Fixed hero slideshow, identical on every site: 01 -> 03 -> 04, swapping every 0.8s. */}
+        {/* Fixed hero slideshow, identical on every site: 01 -> 03 -> 04, swapping every 1.3s, with prev/next arrows. */}
         {HERO_SLIDES.map((src, i) => (
           // eslint-disable-next-line @next/next/no-img-element
           <img
@@ -136,6 +142,25 @@ export default function Hero() {
           </Button>
         </div>
       </div>
+
+      {/* Hero slideshow arrows (small, both sides). */}
+      {[
+        { dir: -1, label: "Previous image", d: "M15 18l-6-6 6-6", side: "left-3 md:left-5" },
+        { dir: 1, label: "Next image", d: "M9 6l6 6-6 6", side: "right-3 md:right-5" },
+      ].map((a) => (
+        <button
+          key={a.dir}
+          type="button"
+          aria-label={a.label}
+          onClick={() => go(a.dir)}
+          className={`absolute top-1/2 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full ${a.side}`}
+          style={{ background: "rgba(0,0,0,0.35)", border: "1px solid rgba(255,255,255,0.45)", color: "#ffffff", cursor: "pointer" }}
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d={a.d} />
+          </svg>
+        </button>
+      ))}
 
       <div className="absolute inset-x-0 bottom-6 z-10 flex flex-col items-center gap-2">
         <span className="block h-10 w-px origin-bottom" style={{ background: "var(--saffron)", animation: "scroll-hint 2.2s ease-in-out infinite" }} />
