@@ -5,8 +5,8 @@ import type { EventConfig } from "@/config/event-schema";
  * Personal data only. Name, address, phone, pin, rating and reviews come from
  * the business's Google Business Profile (maps cid 6233605642846363635); the
  * second phone, email, Instagram, tagline and service list come from their own
- * poster on that profile. gallery/01 and 03 are their own photos from that
- * profile; the hero images and gallery/feature-buffet were supplied by the client.
+ * poster on that profile. Photos in public/events/agnel/gallery are theirs,
+ * from the same profile. The two hero images were supplied by the client.
  */
 export const agnel: EventConfig = {
   slug: "agnel",
@@ -69,9 +69,19 @@ export const agnel: EventConfig = {
       { src: "/template/about-fallback.webp", alt: "Bride under fairy lights at an evening celebration" },
     ],
     gallery: [
-      { src: "gallery/feature-buffet.webp", alt: "Wedding buffet with chafing dishes, biriyani, curries and marigold florals", caption: "The wedding buffet" },
       { src: "gallery/01.webp", alt: "Rustic wooden dining setup with hanging florals and Edison bulbs", caption: "Rustic wedding dining" },
+      { src: "gallery/02.webp", alt: "Welcome drinks served by an Agnel team member", caption: "Welcome drinks" },
       { src: "gallery/03.webp", alt: "Floral ring stage with hanging lights under a draped canopy", caption: "Floral ring stage" },
+      { src: "gallery/04.webp", alt: "Outdoor seating with lavender chair covers and a floral arch", caption: "Garden ceremony seating" },
+      { src: "gallery/05.webp", alt: "Chefs serving hot food from the buffet counter", caption: "Served hot, on the day" },
+      { src: "gallery/06.webp", alt: "Teddy bear and balloon theme décor for a little one's celebration", caption: "Themed celebration décor" },
+      { src: "gallery/07.webp", alt: "Custom welcome board for a mehandi night", caption: "Mehandi night welcome board" },
+      { src: "gallery/08.webp", alt: "Hall set with lavender-draped chairs and dining tables", caption: "Banquet hall setup" },
+      { src: "gallery/09.webp", alt: "Evening outdoor seating lit with fairy lights", caption: "Evening function lighting" },
+      { src: "gallery/10.webp", alt: "Themed stage with balloon arch inside a function hall", caption: "Themed stage" },
+      { src: "gallery/11.webp", alt: "Guests being served at a house function", caption: "House function service" },
+      { src: "gallery/12.webp", alt: "Illuminated floral light sculptures at night", caption: "Light installations" },
+      { src: "gallery/13.webp", alt: "Fresh floral pillar with lavender and white blooms", caption: "Fresh florals" },
     ],
   },
 

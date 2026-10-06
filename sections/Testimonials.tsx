@@ -74,13 +74,9 @@ export default function Testimonials() {
             </figure>
           </Reveal>
 
-          {/* Phones: a swipeable row instead of a long stack. */}
-          <div
-            className="-mx-6 flex snap-x snap-mandatory gap-4 overflow-x-auto px-6 pb-2 [scrollbar-width:none] sm:mx-0 sm:grid sm:grid-cols-2 sm:gap-5 sm:overflow-visible sm:px-0 sm:pb-0 lg:col-span-2 [&::-webkit-scrollbar]:hidden"
-            data-lenis-prevent
-          >
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:col-span-2">
             {rest.map((r, i) => (
-              <Reveal key={r.name} delay={i * 0.06} className="h-full w-[82%] shrink-0 snap-center sm:w-auto">
+              <Reveal key={r.name} delay={i * 0.06} className="h-full">
                 <figure className="flex h-full flex-col rounded-brand border border-ivory/10 bg-ivory/[0.04] p-6 transition-colors hover:border-ivory/25">
                   <div className="flex gap-0.5" aria-label={`${r.rating} out of 5 stars`}>
                     {Array.from({ length: r.rating }).map((_, s) => (
