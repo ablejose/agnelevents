@@ -6,8 +6,22 @@ import { WhatsAppIcon } from "@/components/ui/WhatsAppIcon";
 import { brandAssets, copy, site, waLink } from "@/config/site";
 import { t } from "@/lib/copy";
 
+/** Hero slideshow images shared by every site (public/template/hero). Order is fixed: 01, 03, 04. */
+const HERO_SLIDES: string[] = ["/template/hero/01.webp", "/template/hero/03.webp", "/template/hero/04.webp"];
+const HERO_INTERVAL_MS = 800;
+
 export default function Hero() {
   const mediaRef = useRef<HTMLDivElement>(null);
+  const [slide, setSlide] = useState<number>(0);
+
+  useEffect(() => {
+    HERO_SLIDES.forEach((src) => {
+      const im = new window.Image();
+      im.src = src;
+    });
+    const id = window.setInterval(() => setSlide((s) => (s + 1) % HERO_SLIDES.length), HERO_INTERVAL_MS);
+    return () => window.clearInterval(id);
+  }, []);
 
   useEffect(() => {
     const r = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
