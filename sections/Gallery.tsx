@@ -40,6 +40,44 @@ export default function Gallery() {
           </Reveal>
         </div>
 
+        {galleryImages.length <= 3 ? (
+          /* Few photos: an editorial bento — one large feature, the rest stacked beside it. */
+          <div className="mt-12 grid grid-cols-2 gap-3 md:gap-5 lg:grid-cols-[1.35fr_1fr] lg:grid-rows-2">
+            {galleryImages.map((item, i) => (
+              <Reveal
+                key={item.src}
+                delay={i * 0.08}
+                className={i === 0 ? "col-span-2 lg:col-span-1 lg:row-span-2" : "col-span-1"}
+              >
+                <button
+                  type="button"
+                  onClick={() => setActive(i)}
+                  aria-label={`Open photo: ${item.alt}`}
+                  className={`group relative block h-full w-full overflow-hidden rounded-brand bg-sand ${
+                    i === 0 ? "aspect-[4/3] lg:aspect-auto lg:min-h-[34rem]" : "aspect-[4/5] lg:aspect-auto lg:min-h-[16.5rem]"
+                  }`}
+                >
+                  <Img
+                    src={item.src}
+                    alt={item.alt}
+                    fallbackSeed={item.src}
+                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1.2s] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.05]"
+                  />
+                  <span className="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink/75 via-ink/0 to-ink/0" />
+                  {item.caption && (
+                    <span className="pointer-events-none absolute inset-x-0 bottom-0 p-4 text-left md:p-6">
+                      <span className="block font-sans text-[0.62rem] font-semibold uppercase tracking-[0.24em] text-saffron">0{i + 1}</span>
+                      <span className={`mt-1 block font-display text-ivory ${i === 0 ? "text-xl md:text-3xl" : "text-base md:text-xl"}`}>{item.caption}</span>
+                    </span>
+                  )}
+                  <span className="pointer-events-none absolute right-3 top-3 grid h-9 w-9 place-items-center rounded-full bg-ivory/85 text-espresso opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                    <Maximize2 size={15} />
+                  </span>
+                </button>
+              </Reveal>
+            ))}
+          </div>
+        ) : (
         <div className="relative mt-12">
           <div className="columns-2 gap-3 md:columns-3 md:gap-5 [&>*]:mb-3 md:[&>*]:mb-5">
             {shown.map((item, i) => (
@@ -74,8 +112,9 @@ export default function Gallery() {
             <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-cream via-cream/80 to-transparent" />
           )}
         </div>
+        )}
 
-        {more > 0 && (
+        {galleryImages.length > 3 && more > 0 && (
           <div className="relative mt-6 flex justify-center">
             <button
               type="button"

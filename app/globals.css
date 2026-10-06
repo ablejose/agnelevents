@@ -248,3 +248,48 @@ html {
     transform: translateX(120%);
   }
 }
+
+/* Classic-menu presets: a slow rotating gold-brown sheen around each card. */
+@property --glow-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+.glow-ring {
+  display: block;
+  border-radius: 14px;
+  padding: 1.5px;
+  background: conic-gradient(
+    from var(--glow-angle),
+    rgba(196, 137, 46, 0.18) 0deg,
+    #a9721f 50deg,
+    #f2d394 80deg,
+    #c4892e 110deg,
+    rgba(196, 137, 46, 0.18) 170deg,
+    rgba(196, 137, 46, 0.18) 190deg,
+    #a9721f 230deg,
+    #f2d394 260deg,
+    #c4892e 290deg,
+    rgba(196, 137, 46, 0.18) 350deg
+  );
+  box-shadow: 0 0 0 0 rgba(196, 137, 46, 0), 0 10px 34px -14px rgba(196, 137, 46, 0.55);
+  animation: glow-spin 5s linear infinite, glow-breathe 3.2s ease-in-out infinite;
+}
+.glow-ring:hover,
+.glow-ring-on {
+  box-shadow: 0 0 26px -4px rgba(196, 137, 46, 0.6), 0 14px 40px -16px rgba(169, 114, 31, 0.8);
+}
+@keyframes glow-spin {
+  to {
+    --glow-angle: 360deg;
+  }
+}
+@keyframes glow-breathe {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 0 rgba(196, 137, 46, 0));
+  }
+  50% {
+    filter: drop-shadow(0 0 7px rgba(196, 137, 46, 0.45));
+  }
+}

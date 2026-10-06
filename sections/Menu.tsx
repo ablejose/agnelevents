@@ -228,17 +228,17 @@ export default function Menu() {
           <Reveal className="mt-10" delay={0.05}>
             <p className="text-center font-sans text-[0.7rem] font-medium uppercase tracking-[0.24em] text-muted">{c.presetsLabel}</p>
             <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-3">
-              {menuPresets.map((p) => {
+              {menuPresets.map((p, i) => {
                 const on = preset === p.title;
                 return (
+                  <span key={p.title} className={cn("glow-ring transition-transform duration-300 hover:-translate-y-0.5", on && "glow-ring-on")} style={{ animationDelay: `${i * -1.4}s` }}>
                   <button
-                    key={p.title}
                     type="button"
                     onClick={() => applyPreset(p.title, p.items)}
                     aria-pressed={on}
                     className={cn(
-                      "group flex items-center justify-between gap-4 rounded-brand border px-5 py-4 text-left transition-all duration-300",
-                      on ? "border-espresso bg-espresso text-ivory shadow-[0_18px_40px_-24px_rgba(36,28,21,0.8)]" : "border-sand bg-white hover:-translate-y-0.5 hover:border-saffron/60"
+                      "group flex h-full w-full items-center justify-between gap-4 rounded-[12.5px] px-5 py-4 text-left transition-colors duration-300",
+                      on ? "bg-espresso text-ivory" : "bg-white"
                     )}
                   >
                     <span>
@@ -247,8 +247,9 @@ export default function Menu() {
                         {p.note} · {p.items.length} dishes
                       </span>
                     </span>
-                    {on ? <Check size={18} className="text-saffron" /> : <Sparkles size={18} className="text-saffron-2/60 transition-colors group-hover:text-saffron-2" />}
+                    {on ? <Check size={18} className="text-saffron" /> : <Sparkles size={18} className="text-saffron-2/70 transition-colors group-hover:text-saffron-2" />}
                   </button>
+                  </span>
                 );
               })}
             </div>
@@ -256,7 +257,13 @@ export default function Menu() {
         )}
 
         {/* COURSE RAIL — sticky on phones so switching course is always one tap away */}
-        <div className="sticky top-[74px] z-20 -mx-6 mt-10 bg-cream/90 px-6 py-3 backdrop-blur-md lg:static lg:mx-0 lg:bg-transparent lg:p-0 lg:backdrop-blur-0">
+        <div
+          className={cn(
+            "sticky top-[74px] z-20 -mx-6 mt-10 bg-cream/90 px-6 py-3 backdrop-blur-md transition-all duration-300 lg:pointer-events-auto lg:static lg:mx-0 lg:translate-y-0 lg:bg-transparent lg:p-0 lg:opacity-100 lg:backdrop-blur-0",
+            // Phones: step out of the way once the menu-card panel is on screen.
+            panelVisible && "pointer-events-none -translate-y-4 opacity-0"
+          )}
+        >
           <div
             ref={railRef}
             role="tablist"
@@ -438,7 +445,7 @@ export default function Menu() {
 
           {/* QUOTE PANEL — the visitor's own menu card. On desktop it sticks, scrolls inside, and keeps the button in view. */}
           <div ref={panelRef} className="scroll-mt-24 lg:sticky lg:top-24">
-            <div className="flex flex-col overflow-hidden rounded-[24px] bg-espresso text-ivory shadow-[0_40px_80px_-40px_rgba(36,28,21,0.9)] lg:max-h-[calc(100svh-7.5rem)]">
+            <div className="flex flex-col overflow-clip rounded-[24px] bg-espresso text-ivory shadow-[0_40px_80px_-40px_rgba(36,28,21,0.9)] lg:max-h-[calc(100svh-7.5rem)]">
               <div className="min-h-0 flex-1 overflow-y-auto [scrollbar-color:rgba(196,137,46,0.5)_transparent] [scrollbar-width:thin]" data-lenis-prevent>
                 {/* Card header */}
                 <div className="relative px-6 pb-4 pt-6 text-center">
@@ -495,8 +502,8 @@ export default function Menu() {
                   </div>
                 </div>
 
-                {/* Selected dishes */}
-                <div className="mt-4 px-6">
+                {/* Selected dishes — scrolls in place however many are added */}
+                <div className="mt-4 max-h-[15rem] overflow-y-auto px-6 [scrollbar-color:rgba(196,137,46,0.5)_transparent] [scrollbar-width:thin]" data-lenis-prevent>
                   {grouped.length === 0 ? (
                     <p className="rounded-brand border border-dashed border-ivory/15 px-4 py-5 text-center font-sans text-sm leading-relaxed text-ivory/55">{c.listEmpty}</p>
                   ) : (
@@ -539,66 +546,8 @@ export default function Menu() {
                 </div>
 
                 <div className="mt-4 border-t border-ivory/10 px-6 pb-5 pt-5">
-                  {/* Guests slider */}
-                  <div className="flex items-end justify-between">
-                    <label htmlFor="menu-guests" className="font-sans text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-ivory/55">
-                      {c.guestsLabel}
-                    </label>
-                    <p className="font-display text-3xl leading-none text-ivory">
-                      {guests}
-                      <span className="ml-1.5 font-sans text-xs text-ivory/50">{c.guestsUnit}</span>
-                    </p>
-                  </div>
-                  <div className="mt-4 flex items-center gap-3">
-                    <button
-                      type="button"
-                      aria-label="Fewer guests"
-                      onClick={() => nudge(-GUESTS.step)}
-                      className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-ivory/20 text-ivory/80 hover:border-saffron hover:text-saffron"
-                    >
-                      <Minus size={14} />
-                    </button>
-                    <input
-                      id="menu-guests"
-                      type="range"
-                      min={GUESTS.min}
-                      max={GUESTS.max}
-                      step={GUESTS.step}
-                      value={guests}
-                      onChange={(e) => setGuests(Number(e.target.value))}
-                      className="guest-range w-full"
-                      style={{ "--fill": `${pct}%` } as React.CSSProperties}
-                      aria-valuetext={`${guests} ${c.guestsUnit}`}
-                    />
-                    <button
-                      type="button"
-                      aria-label="More guests"
-                      onClick={() => nudge(GUESTS.step)}
-                      className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-ivory/20 text-ivory/80 hover:border-saffron hover:text-saffron"
-                    >
-                      <Plus size={14} />
-                    </button>
-                  </div>
-                  {/* Tick labels sit at their real position on the track (thumb is 22px wide). */}
-                  <div className="relative mx-11 mt-2 h-4 font-sans text-[0.65rem] text-ivory/40">
-                    {GUEST_TICKS.map((v) => {
-                      const at = (v - GUESTS.min) / (GUESTS.max - GUESTS.min);
-                      return (
-                        <button
-                          key={v}
-                          type="button"
-                          onClick={() => setGuests(v)}
-                          className="absolute top-0 -translate-x-1/2 hover:text-saffron"
-                          style={{ left: `calc(${at * 100}% + ${11 - at * 22}px)` }}
-                        >
-                          {v >= 1000 ? `${v / 1000}k` : v}
-                        </button>
-                      );
-                    })}
-                  </div>
-
                   {/* Occasion */}
-                  <p className="mt-6 font-sans text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-ivory/55">{c.eventLabel}</p>
+                  <p className="font-sans text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-ivory/55">{c.eventLabel}</p>
                   <div className="mt-3 flex flex-wrap gap-2">
                     {c.eventTypes.map((ev) => (
                       <button
@@ -643,12 +592,71 @@ export default function Menu() {
                 </div>
               </div>
 
-              {/* Always-visible call to action */}
-              <div className="border-t border-ivory/10 bg-[#1c150f] px-6 pb-5 pt-4">
+              {/* Always-visible footer: guest count + call to action */}
+              {/* Phones: sticks to the bottom of the screen while the panel scrolls past. */}
+              <div className="sticky bottom-0 z-10 rounded-b-[24px] border-t border-ivory/10 bg-[#1c150f] px-6 pb-5 pt-4 shadow-[0_-18px_30px_-20px_rgba(0,0,0,0.8)] lg:static lg:shadow-none">
+                {/* Guests slider */}
+                <div className="flex items-end justify-between">
+                  <label htmlFor="menu-guests" className="font-sans text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-ivory/55">
+                    {c.guestsLabel}
+                  </label>
+                  <p className="font-display text-[1.7rem] leading-none text-ivory">
+                    {guests}
+                    <span className="ml-1.5 font-sans text-xs text-ivory/50">{c.guestsUnit}</span>
+                  </p>
+                </div>
+                <div className="mt-4 flex items-center gap-3">
+                  <button
+                    type="button"
+                    aria-label="Fewer guests"
+                    onClick={() => nudge(-GUESTS.step)}
+                    className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-ivory/20 text-ivory/80 hover:border-saffron hover:text-saffron"
+                  >
+                    <Minus size={14} />
+                  </button>
+                  <input
+                    id="menu-guests"
+                    type="range"
+                    min={GUESTS.min}
+                    max={GUESTS.max}
+                    step={GUESTS.step}
+                    value={guests}
+                    onChange={(e) => setGuests(Number(e.target.value))}
+                    className="guest-range w-full"
+                    style={{ "--fill": `${pct}%` } as React.CSSProperties}
+                    aria-valuetext={`${guests} ${c.guestsUnit}`}
+                  />
+                  <button
+                    type="button"
+                    aria-label="More guests"
+                    onClick={() => nudge(GUESTS.step)}
+                    className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-ivory/20 text-ivory/80 hover:border-saffron hover:text-saffron"
+                  >
+                    <Plus size={14} />
+                  </button>
+                </div>
+                {/* Tick labels sit at their real position on the track (thumb is 22px wide). */}
+                <div className="relative mx-11 mt-2 h-4 font-sans text-[0.65rem] text-ivory/40">
+                  {GUEST_TICKS.map((v) => {
+                    const at = (v - GUESTS.min) / (GUESTS.max - GUESTS.min);
+                    return (
+                      <button
+                        key={v}
+                        type="button"
+                        onClick={() => setGuests(v)}
+                        className="absolute top-0 -translate-x-1/2 hover:text-saffron"
+                        style={{ left: `calc(${at * 100}% + ${11 - at * 22}px)` }}
+                      >
+                        {v >= 1000 ? `${v / 1000}k` : v}
+                      </button>
+                    );
+                  })}
+                </div>
+
                 <button
                   type="button"
                   onClick={send}
-                  className="quote-cta group relative flex w-full items-center justify-between gap-3 overflow-hidden rounded-full bg-saffron py-2.5 pl-6 pr-2.5 text-left text-espresso transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_-14px_rgba(196,137,46,0.75)]"
+                  className="quote-cta group mt-4 relative flex w-full items-center justify-between gap-3 overflow-hidden rounded-full bg-saffron py-2.5 pl-6 pr-2.5 text-left text-espresso transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_-14px_rgba(196,137,46,0.75)]"
                 >
                   <span className="relative z-10 min-w-0 leading-tight">
                     <span className="block font-sans text-[0.95rem] font-bold">{c.submit}</span>
@@ -677,7 +685,7 @@ export default function Menu() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 8 }}
             transition={{ duration: 0.3, ease: EASE }}
-            className="pointer-events-none fixed bottom-6 left-1/2 z-[66] hidden -translate-x-1/2 items-center gap-2 rounded-full bg-espresso px-4 py-2.5 font-sans text-xs text-ivory shadow-[0_16px_40px_-16px_rgba(0,0,0,0.6)] lg:flex"
+            className="pointer-events-none fixed bottom-6 left-6 z-[66] hidden items-center gap-2 rounded-full bg-espresso px-4 py-2.5 font-sans text-xs text-ivory shadow-[0_16px_40px_-16px_rgba(0,0,0,0.6)] lg:flex"
           >
             <span className="grid h-5 w-5 place-items-center rounded-full bg-saffron text-espresso">
               <Check size={12} strokeWidth={3} />
